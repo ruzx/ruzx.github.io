@@ -7,8 +7,8 @@
     <!-- CSS Framework -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
     
-    <!-- 2D Renderer (v1.0.10) -->
-    <script src="https://unpkg.com/smiles-drawer@1.0.10/dist/smiles-drawer.min.js"></script>
+    <!-- 2D Renderer (v2.1.8 - Supports Reactions) -->
+    <script src="https://unpkg.com/smiles-drawer@2.1.8/dist/smiles-drawer.min.js"></script>
     
     <!-- Interactive Molecule Editor (JSME) -->
     <script type="text/javascript" src="https://jsme-editor.github.io/dist/jsme/jsme.nocache.js"></script>
@@ -20,9 +20,7 @@
         .footer-promo a { color: #167782; text-decoration: none; font-weight: bold; }
         #jsme_container { width: 100%; height: 350px; display: none; }
         .toolbar { display: flex; justify-content: center; gap: 10px; margin-top: 15px; }
-        
-        /* Container for reactions which might be wide */
-        #draw-container { width: 100%; display: flex; justify-content: center; align-items: center; min-height: 300px; overflow-x: auto; padding: 10px; }
+        #draw-container { width: 100%; display: flex; justify-content: center; align-items: center; min-height: 250px; overflow-x: auto; padding: 10px; }
     </style>
 </head>
 <body>
@@ -38,7 +36,10 @@
             <!-- Interactive Editor -->
             <div id="jsme_container"></div>
 
-            <div id="error-msg" style="display:none; color: #d9534f; padding: 10px; font-size: 13px;"></div>
+            <!-- Friendly Fallback Message -->
+            <div id="friendly-msg" style="display:none; color: #666; padding: 20px; font-style: italic; background: #f9f9f9; border-radius: 8px;">
+                Static preview not available for this structure.<br>Please click <b>'Edit Structure'</b> to view it.
+            </div>
 
             <!-- Toolbar -->
             <div class="toolbar">
@@ -48,7 +49,7 @@
         </div>
 
         <div class="footer-promo">
-            Shared via <a href="https://github.com/ruzx/obsidian-chemedit" target="_blank">ChemEdit</a> • 
+            Shared via <a href="https://github.com/katananananna/obsidian-chemedit" target="_blank">ChemEdit</a> • 
             <a href="/about.html">About</a>
         </div>
     </main>
@@ -56,29 +57,27 @@
     <script>
         let currentSmiles = "";
         let jsmeApplet = null;
+        let isJsmeReady = false;
 
-        // Required callback for JSME editor initialization
+        // JSME calls this automatically when it finishes downloading in the background
         function jsmeOnLoad() {
-            // Ready
+            isJsmeReady = true;
         }
 
         document.addEventListener("DOMContentLoaded", function() {
             const hash = window.location.hash;
             
-            // Load structure from URL
             if (hash.startsWith('#smi=')) {
                 currentSmiles = decodeURIComponent(hash.substring(5));
                 drawSmiles(currentSmiles);
             } else {
-                showError("No molecule data provided in the link.");
+                showFriendlyMessage("No molecule data provided in the link.");
             }
 
-            // Edit Button Click Logic
             document.getElementById('edit-btn').addEventListener('click', function() {
                 openEditor();
             });
 
-            // Copy Button Click Logic
             document.getElementById('copy-btn').addEventListener('click', function() {
                 if (jsmeApplet) {
                     const newSmiles = jsmeApplet.smiles();
@@ -90,10 +89,17 @@
             });
         });
 
-        // Opens the JSME interactive editor
         function openEditor() {
+            // Wait for JSME to finish loading to prevent ReferenceError
+            if (!isJsmeReady) {
+                document.getElementById('title').innerText = "Loading editor... please wait.";
+                setTimeout(openEditor, 200);
+                return;
+            }
+
             document.getElementById('draw-container').style.display = 'none';
             document.getElementById('edit-btn').style.display = 'none';
+            document.getElementById('friendly-msg').style.display = 'none';
             
             document.getElementById('jsme_container').style.display = 'block';
             document.getElementById('copy-btn').style.display = 'inline-block';
@@ -102,60 +108,48 @@
             if (!jsmeApplet) {
                 jsmeApplet = new JSApplet.JSME("jsme_container", "100%", "350px");
             }
-            // Load the SMILES into the editor
             jsmeApplet.readGenericMolecularInput(currentSmiles);
         }
 
-        // Rendering function using stable SmilesDrawer v1
         function drawSmiles(smiles) {
             try {
                 if (smiles.includes('>')) {
-                    // --- REACTION RENDERING ---
                     document.getElementById('molecule-canvas').style.display = 'none';
-                    
-                    // Create a dynamic div for the reaction to draw into
                     const rxnContainer = document.createElement('div');
                     rxnContainer.id = 'rxn-canvas-container';
                     rxnContainer.style.display = 'flex';
                     rxnContainer.style.alignItems = 'center';
                     rxnContainer.style.justifyContent = 'center';
-                    
                     document.getElementById('draw-container').appendChild(rxnContainer);
 
-                    // Make the individual molecules slightly smaller so the whole reaction fits well
                     const rxnOptions = { width: 250, height: 250, compactDrawing: false };
-                    const drawer = new SmilesDrawer.ReactionDrawer(rxnOptions);
+                    const drawer = new SmiDrawer.ReactionDrawer(rxnOptions);
                     
-                    SmilesDrawer.parseReaction(smiles, function(tree) {
+                    SmiDrawer.parseReaction(smiles, function(tree) {
                         drawer.draw(tree, 'rxn-canvas-container', 'light', false);
                     }, function(err) {
-                        console.warn("Parse warning:", err);
-                        showError("Syntax error in Reaction string. Fallback to editor.");
-                        openEditor(); 
+                        showFriendlyMessage();
                     });
                 } else {
-                    // --- SINGLE MOLECULE RENDERING ---
                     const options = { width: 400, height: 400, compactDrawing: false };
-                    const drawer = new SmilesDrawer.Drawer(options);
+                    const drawer = new SmiDrawer.Drawer(options);
                     
-                    SmilesDrawer.parse(smiles, function(tree) {
+                    SmiDrawer.parse(smiles, function(tree) {
                         drawer.draw(tree, 'molecule-canvas', 'light', false);
                     }, function(err) {
-                        console.warn("Parse warning:", err);
-                        showError("Syntax error in SMILES string. Fallback to editor.");
-                        openEditor(); 
+                        showFriendlyMessage();
                     });
                 }
             } catch (e) {
-                console.error("Render error:", e);
-                showError("Library error. Fallback to editor.");
-                openEditor(); 
+                showFriendlyMessage();
             }
         }
 
-        function showError(msg) {
-            document.getElementById('error-msg').innerText = msg;
-            document.getElementById('error-msg').style.display = 'block';
+        function showFriendlyMessage(customMsg) {
+            document.getElementById('draw-container').style.display = 'none';
+            const msgEl = document.getElementById('friendly-msg');
+            if (customMsg) msgEl.innerHTML = customMsg;
+            msgEl.style.display = 'block';
         }
     </script>
 </body>
