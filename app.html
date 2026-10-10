@@ -6,6 +6,258 @@
     <title>ChemEdit Web ELN</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
     
+    <script src="https://unpkg.com/smiles-drawer@2.1.8/dist/smiles-drawer.min.js"></script>
+    <script type="text/javascript" src="https://jsme-editor.github.io/dist/jsme/jsme.nocache.js"></script>
+    
+    <style>
+        body { background: #f4f7f8; }
+        nav { background: #167782; color: white; padding: 10px 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        nav a { color: white; font-weight: bold; text-decoration: none; }
+        .dashboard { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; max-width: 1400px; margin: 0 auto; padding: 0 20px; }
+        @media (max-width: 900px) { .dashboard { grid-template-columns: 1fr; } }
+        
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid #ddd; }
+        #jsme_container { width: 100%; height: 350px; border: 1px solid #ccc; border-radius: 4px; overflow: hidden; margin-bottom: 10px; }
+        
+        table { width: 100%; font-size: 13px; border-collapse: collapse; }
+        th { background: #f8f9fa; border-bottom: 2px solid #ddd; padding: 10px; color: #555; text-transform: uppercase; font-size: 11px; text-align: left; }
+        td { border-bottom: 1px solid #eee; padding: 10px; vertical-align: middle; }
+        input[type="number"], input[type="text"] { width: 85px; padding: 4px 8px; font-size: 13px; margin: 0; border: 1px solid #ccc; border-radius: 4px; }
+        input:focus { border-color: #167782; outline: none; }
+        
+        .delete-btn { color: #d9534f; cursor: pointer; background: none; border: none; font-size: 16px; padding: 0; box-shadow: none; }
+        .delete-btn:hover { background: none; color: #a00; }
+        
+        .yield-good { color: #28a745; font-weight: bold; }
+        .yield-bad { color: #d9534f; font-weight: bold; }
+        .yield-warn { color: #ffc107; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <nav>
+        <div style="max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 1.2em;">🧪 ChemEdit Web ELN</span>
+            <span><a href="/about.html">About</a> | <a href="https://github.com/katananananna/obsidian-chemedit" target="_blank">Get Obsidian Plugin</a></span>
+        </div>
+    </nav>
+
+    <div class="dashboard">
+        <div class="card">
+            <h5 style="margin-bottom: 10px;">1. Draw Molecule</h5>
+            <div id="jsme_container"></div>
+            <div class="grid">
+                <button onclick="addCompound('reactant')" class="outline">➕ Add Reactant</button>
+                <button onclick="addCompound('product')">➕ Add Product</button>
+            </div>
+            <small id="status-msg" style="color: #666; display: block; margin-top: 10px; font-weight: bold;"></small>
+        </div>
+
+        <div class="card" style="overflow-x: auto;">
+            <h5 style="margin-bottom: 10px;">2. Stoichiometry Table</h5>
+            
+            <h6 style="margin-bottom: 5px; color: #444;">Reactants</h6>
+            <table id="reactants-table">
+                <thead><tr><th>Eq</th><th>Structure</th><th>Name</th><th>MW</th><th>mmol</th><th>Mass (mg)</th><th></th></tr></thead>
+                <tbody></tbody>
+            </table>
+
+            <h6 style="margin-top: 20px; margin-bottom: 5px; color: #444;">Products</h6>
+            <table id="products-table">
+                <thead><tr><th>Eq</th><th>Structure</th><th>Name</th><th>MW</th><th>mmol</th><th>Isol (mg)</th><th>Yield</th><th></th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let jsmeApplet = null;
+        function jsmeOnLoad() { jsmeApplet = new JSApplet.JSME("jsme_container", "100%", "350px"); }
+
+        let elnData = { reactants: [], products: [] };
+
+        async function addCompound(type) {
+            if (!jsmeApplet) return;
+            const smiles = jsmeApplet.smiles();
+            if (!smiles) { showStatus("Please draw a molecule first.", "#d9534f"); return; }
+            
+            showStatus("Fetching Molecular Weight...", "#167782");
+            let mw = 0; let name = "Compound";
+            
+            try {
+                const res = await fetch(`https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/smiles/${encodeURIComponent(smiles)}/property/MolecularWeight,IUPACName/JSON`);
+                if (res.ok) {
+                    const data = await res.json();
+                    mw = parseFloat(data.PropertyTable.Properties[0].MolecularWeight);
+                    name = data.PropertyTable.Properties[0].IUPACName ? data.PropertyTable.Properties[0].IUPACName.split(' ')[0].substring(0, 15) : "Compound";
+                }
+            } catch (e) { mw = 100; }
+
+            const compound = {
+                id: Math.random().toString(36).substring(2, 9),
+                smiles: smiles, name: name, mw: mw,
+                eq: 1, mmol: null, mass: null, mass_isolated: null, yield: null
+            };
+
+            if (type === 'reactant') elnData.reactants.push(compound);
+            else elnData.products.push(compound);
+            
+            jsmeApplet.reset();
+            showStatus("Compound added!", "#28a745");
+            
+            // Completely rebuild HTML only when adding/removing
+            buildTableHTML(); 
+        }
+
+        function handleInput(type, id, key, val) {
+            const arr = elnData[type];
+            const item = arr.find(x => x.id === id);
+            if (!item) return;
+
+            const num = parseFloat(val);
+            item[key] = isNaN(num) ? null : num;
+
+            // Smart clearing: if you type mass, erase mmol so it recalculates and vice versa
+            if (key === 'mass') item.mmol = null;
+            if (key === 'mmol') item.mass = null;
+            if (key === 'mass_isolated') item.mmol_isolated = null;
+
+            calculateELN();
+        }
+
+        function calculateELN() {
+            // Find reference point (first reactant with mass or mmol inputted)
+            let limitingR = elnData.reactants.find(r => r.mass > 0 || r.mmol > 0);
+            if (!limitingR && elnData.reactants.length > 0) limitingR = elnData.reactants[0];
+
+            let refMmol = 0;
+            if (limitingR) {
+                if (limitingR.mmol > 0) {
+                    refMmol = limitingR.mmol / (limitingR.eq || 1);
+                    if (limitingR.mw > 0) limitingR.mass = limitingR.mmol * limitingR.mw;
+                } else if (limitingR.mass > 0 && limitingR.mw > 0) {
+                    refMmol = (limitingR.mass / limitingR.mw) / (limitingR.eq || 1);
+                    limitingR.mmol = (limitingR.mass / limitingR.mw);
+                }
+            }
+
+            // Fill down the remaining reactants
+            elnData.reactants.forEach(r => {
+                if (r !== limitingR && refMmol > 0) {
+                    r.mmol = refMmol * (r.eq || 1);
+                    if (r.mw > 0) r.mass = r.mmol * r.mw;
+                }
+            });
+
+            // Calculate products
+            elnData.products.forEach(p => {
+                p.theory_mmol = refMmol * (p.eq || 1);
+                if (p.mw > 0) p.theory_mass = p.theory_mmol * p.mw;
+
+                if (p.mass_isolated > 0 && p.mw > 0) {
+                    p.mmol_isolated = p.mass_isolated / p.mw;
+                } else { p.mmol_isolated = null; }
+
+                if (p.mass_isolated > 0 && p.theory_mass > 0) {
+                    p.yield = ((p.mass_isolated / p.theory_mass) * 100).toFixed(1);
+                } else { p.yield = null; }
+            });
+
+            // Surgically update the values on the screen without losing focus
+            updateDOMValues();
+        }
+
+        // Builds the table elements once (Prevents losing typing focus)
+        function buildTableHTML() {
+            const rTbody = document.querySelector('#reactants-table tbody');
+            const pTbody = document.querySelector('#products-table tbody');
+            rTbody.innerHTML = ''; pTbody.innerHTML = '';
+
+            const drawStructure = (smiles, id) => {
+                setTimeout(() => {
+                    try {
+                        const drawer = new SmiDrawer.Drawer({ width: 80, height: 80, compactDrawing: false });
+                        SmiDrawer.parse(smiles, tree => drawer.draw(tree, id, 'light', false));
+                    } catch(e) {}
+                }, 50);
+            };
+
+            elnData.reactants.forEach(r => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><input type="number" step="any" id="req_${r.id}" value="${r.eq}" oninput="handleInput('reactants', '${r.id}', 'eq', this.value)"></td>
+                    <td><canvas id="rcanvas_${r.id}" width="80" height="80"></canvas></td>
+                    <td><input type="text" value="${r.name}" style="width:120px;"></td>
+                    <td>${r.mw > 0 ? r.mw.toFixed(2) : '-'}</td>
+                    <td><input type="number" step="any" id="rmmol_${r.id}" placeholder="mmol" oninput="handleInput('reactants', '${r.id}', 'mmol', this.value)"></td>
+                    <td><input type="number" step="any" id="rmass_${r.id}" placeholder="mg" oninput="handleInput('reactants', '${r.id}', 'mass', this.value)"></td>
+                    <td><button class="delete-btn" onclick="deleteCompound('reactants', '${r.id}')">✖</button></td>
+                `;
+                rTbody.appendChild(tr); drawStructure(r.smiles, `rcanvas_${r.id}`);
+            });
+
+            elnData.products.forEach(p => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><input type="number" step="any" id="peq_${p.id}" value="${p.eq}" oninput="handleInput('products', '${p.id}', 'eq', this.value)"></td>
+                    <td><canvas id="pcanvas_${p.id}" width="80" height="80"></canvas></td>
+                    <td><input type="text" value="${p.name}" style="width:120px;"></td>
+                    <td>${p.mw > 0 ? p.mw.toFixed(2) : '-'}</td>
+                    <td id="pmmol_${p.id}">-</td>
+                    <td><input type="number" step="any" id="pmass_${p.id}" placeholder="mg" oninput="handleInput('products', '${p.id}', 'mass_isolated', this.value)"></td>
+                    <td id="pyield_${p.id}">-</td>
+                    <td><button class="delete-btn" onclick="deleteCompound('products', '${p.id}')">✖</button></td>
+                `;
+                pTbody.appendChild(tr); drawStructure(p.smiles, `pcanvas_${p.id}`);
+            });
+
+            calculateELN();
+        }
+
+        // Fast update logic: only changes numbers, doesn't destroy inputs!
+        function updateDOMValues() {
+            const activeId = document.activeElement ? document.activeElement.id : null;
+
+            elnData.reactants.forEach(r => {
+                if (activeId !== `req_${r.id}`) document.getElementById(`req_${r.id}`).value = r.eq || '';
+                if (activeId !== `rmmol_${r.id}`) document.getElementById(`rmmol_${r.id}`).value = r.mmol ? r.mmol.toFixed(2) : '';
+                if (activeId !== `rmass_${r.id}`) document.getElementById(`rmass_${r.id}`).value = r.mass ? r.mass.toFixed(1) : '';
+            });
+
+            elnData.products.forEach(p => {
+                if (activeId !== `peq_${p.id}`) document.getElementById(`peq_${p.id}`).value = p.eq || '';
+                if (activeId !== `pmass_${p.id}`) document.getElementById(`pmass_${p.id}`).value = p.mass_isolated ? p.mass_isolated.toFixed(1) : '';
+                
+                const pmmol = document.getElementById(`pmmol_${p.id}`);
+                if (pmmol) pmmol.innerText = p.mmol_isolated ? p.mmol_isolated.toFixed(2) : (p.theory_mmol ? `(${p.theory_mmol.toFixed(2)})` : '-');
+                
+                const pyield = document.getElementById(`pyield_${p.id}`);
+                if (pyield) {
+                    pyield.innerText = p.yield ? p.yield + '%' : '-';
+                    pyield.className = p.yield ? (p.yield >= 80 ? 'yield-good' : (p.yield <= 30 ? 'yield-bad' : 'yield-warn')) : '';
+                }
+            });
+        }
+
+        function deleteCompound(type, id) {
+            elnData[type] = elnData[type].filter(x => x.id !== id);
+            buildTableHTML();
+        }
+
+        function showStatus(msg, color) {
+            const el = document.getElementById('status-msg');
+            el.innerText = msg; el.style.color = color;
+            setTimeout(() => el.innerText = '', 3000);
+        }
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ChemEdit Web ELN</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+    
     <!-- Updated to match the Viewer -->
     <script src="https://unpkg.com/smiles-drawer@2.1.8/dist/smiles-drawer.min.js"></script>
     <script type="text/javascript" src="https://jsme-editor.github.io/dist/jsme/jsme.nocache.js"></script>
@@ -35,7 +287,7 @@
     <nav>
         <div style="max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
             <span style="font-size: 1.2em;">🧪 ChemEdit Web ELN</span>
-            <span><a href="/about.html">About</a> | <a href="https://github.com/katananananna/obsidian-chemedit" target="_blank">Get Obsidian Plugin</a></span>
+            <span><a href="/about.html">About</a> | <a href="https://github.com/ruzx/obsidian-chemedit" target="_blank">Get Obsidian Plugin</a></span>
         </div>
     </nav>
 
