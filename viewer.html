@@ -7,8 +7,8 @@
     <!-- CSS Framework -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
     
-    <!-- 2D Renderer (Bug fixed: SmiDrawer) -->
-    <script src="https://unpkg.com/smiles-drawer@2.1.8/dist/smiles-drawer.min.js"></script>
+    <!-- 2D Renderer (Reverted to ultra-stable v1.0.10 for browser) -->
+    <script src="https://unpkg.com/smiles-drawer@1.0.10/dist/smiles-drawer.min.js"></script>
     
     <!-- Interactive Molecule Editor (JSME) -->
     <script type="text/javascript" src="https://jsme-editor.github.io/dist/jsme/jsme.nocache.js"></script>
@@ -33,7 +33,7 @@
             <!-- Interactive Editor -->
             <div id="jsme_container"></div>
 
-            <div id="error-msg" style="display:none; color: #d9534f; padding: 20px;">Invalid SMILES string.</div>
+            <div id="error-msg" style="display:none; color: #d9534f; padding: 10px; font-size: 13px;"></div>
 
             <!-- Toolbar -->
             <div class="toolbar">
@@ -52,9 +52,9 @@
         let currentSmiles = "";
         let jsmeApplet = null;
 
-        // Required callback for JSME editor
+        // Required callback for JSME editor initialization
         function jsmeOnLoad() {
-            // Applet is loaded into memory, waiting for the user to click "Edit"
+            // Ready
         }
 
         document.addEventListener("DOMContentLoaded", function() {
@@ -70,20 +70,7 @@
 
             // Edit Button Click Logic
             document.getElementById('edit-btn').addEventListener('click', function() {
-                // Hide static canvas, show editor
-                document.getElementById('molecule-canvas').style.display = 'none';
-                this.style.display = 'none'; // hide edit button
-                
-                document.getElementById('jsme_container').style.display = 'block';
-                document.getElementById('copy-btn').style.display = 'inline-block';
-                document.getElementById('title').innerText = "Edit Structure";
-
-                // Initialize editor if it hasn't been yet
-                if (!jsmeApplet) {
-                    jsmeApplet = new JSApplet.JSME("jsme_container", "100%", "350px");
-                }
-                // Load the SMILES into the editor
-                jsmeApplet.readGenericMolecularInput(currentSmiles);
+                openEditor();
             });
 
             // Copy Button Click Logic
@@ -98,26 +85,43 @@
             });
         });
 
-        // Rendering function
+        // Opens the JSME interactive editor
+        function openEditor() {
+            document.getElementById('molecule-canvas').style.display = 'none';
+            document.getElementById('edit-btn').style.display = 'none';
+            
+            document.getElementById('jsme_container').style.display = 'block';
+            document.getElementById('copy-btn').style.display = 'inline-block';
+            document.getElementById('title').innerText = "Edit Structure";
+
+            if (!jsmeApplet) {
+                jsmeApplet = new JSApplet.JSME("jsme_container", "100%", "350px");
+            }
+            // Load the SMILES into the editor
+            jsmeApplet.readGenericMolecularInput(currentSmiles);
+        }
+
+        // Rendering function using stable SmilesDrawer v1
         function drawSmiles(smiles) {
             try {
                 const options = { width: 400, height: 400, compactDrawing: false };
-                // FIX: SmiDrawer instead of SmilesDrawer
-                const drawer = new SmiDrawer.Drawer(options);
+                const drawer = new SmilesDrawer.Drawer(options);
                 
-                SmiDrawer.parse(smiles, function(tree) {
+                SmilesDrawer.parse(smiles, function(tree) {
                     drawer.draw(tree, 'molecule-canvas', 'light', false);
                 }, function(err) {
-                    showError("Could not parse structure.");
+                    console.warn("Parse warning:", err);
+                    showError("Syntax error in SMILES string. Fallback to editor.");
+                    openEditor(); // Smart fallback
                 });
             } catch (e) {
-                showError("Rendering library error.");
+                console.error("Render error:", e);
+                showError("Library error. Fallback to editor.");
+                openEditor(); // Smart fallback
             }
         }
 
         function showError(msg) {
-            document.getElementById('molecule-canvas').style.display = 'none';
-            document.getElementById('edit-btn').style.display = 'none';
             document.getElementById('error-msg').innerText = msg;
             document.getElementById('error-msg').style.display = 'block';
         }
