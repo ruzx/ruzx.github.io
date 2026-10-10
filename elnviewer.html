@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Shared Experiment</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+    <script src="https://unpkg.com/smiles-drawer@2.1.8/dist/smiles-drawer.min.js"></script>
+    
+    <style>
+        body { background: #f4f7f8; }
+        nav { background: #167782; color: white; padding: 10px 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        nav a { color: white; font-weight: bold; text-decoration: none; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #ddd; margin-bottom: 20px; }
+        
+        table { width: 100%; font-size: 14px; border-collapse: collapse; }
+        th { background: #f8f9fa; border-bottom: 2px solid #ddd; padding: 12px; color: #555; text-transform: uppercase; font-size: 12px; text-align: left; }
+        td { border-bottom: 1px solid #eee; padding: 12px; vertical-align: middle; font-weight: 500; }
+        
+        .yield-good { color: #28a745; font-weight: bold; }
+        .yield-bad { color: #d9534f; font-weight: bold; }
+        .yield-warn { color: #ffc107; font-weight: bold; }
+        
+        .reaction-summary { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px; border: 1px solid #eee; flex-wrap: wrap; }
+        .arrow { font-size: 30px; font-weight: bold; color: #167782; padding: 0 15px; }
+        .plus { font-size: 24px; font-weight: bold; color: #999; padding: 0 10px; }
+    </style>
+</head>
+<body>
+    <nav>
+        <div style="max-width: 1000px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 1.2em;">🧪 Shared Experiment</span>
+            <span><a href="/about.html">About</a> | <a href="https://github.com/ruzx/obsidian-chemedit" target="_blank">ChemEdit for Obsidian</a></span>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="card" id="content-card">
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 style="margin: 0;">Stoichiometry Report</h3>
+                <button onclick="openInEditor()" class="outline" style="padding: 6px 15px; margin: 0;">✏️ Edit & Recalculate</button>
+            </div>
+
+            <!-- Visual Reaction Header -->
+            <div id="reaction-summary" class="reaction-summary"></div>
+
+            <h5 style="color: #444; border-bottom: 2px solid #ddd; padding-bottom: 5px;">Reactants</h5>
+            <div style="overflow-x: auto;">
+                <table id="reactants-table">
+                    <thead><tr><th>Eq</th><th>Structure</th><th>Name</th><th>MW</th><th>mmol</th><th>Mass (mg)</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <h5 style="color: #444; border-bottom: 2px solid #ddd; padding-bottom: 5px; margin-top: 30px;">Products</h5>
+            <div style="overflow-x: auto;">
+                <table id="products-table">
+                    <thead><tr><th>Eq</th><th>Structure</th><th>Name</th><th>MW</th><th>mmol</th><th>Isol (mg)</th><th>Yield</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            
+            <div id="error-msg" style="display: none; color: #d9534f; text-align: center; padding: 20px;"></div>
+        </div>
+    </div>
+
+    <script>
+        let rawHash = "";
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const hash = window.location.hash;
+            if (hash.startsWith('#eln=')) {
+                try {
+                    rawHash = hash;
+                    const b64 = hash.substring(5);
+                    const jsonStr = decodeURIComponent(escape(atob(b64)));
+                    const elnData = JSON.parse(jsonStr);
+                    renderReport(elnData);
+                } catch (e) {
+                    showError("Invalid or corrupted experiment link.");
+                }
+            } else {
+                showError("No experiment data provided.");
+            }
+        });
+
+        function renderReport(data) {
+            const rTbody = document.querySelector('#reactants-table tbody');
+            const pTbody = document.querySelector('#products-table tbody');
+            const summary = document.getElementById('reaction-summary');
+            
+            const drawStructure = (smiles, id, size) => {
+                setTimeout(() => {
+                    try {
+                        const drawer = new SmiDrawer.Drawer({ width: size, height: size, compactDrawing: false });
+                        SmiDrawer.parse(smiles, tree => drawer.draw(tree, id, 'light', false));
+                    } catch(e) {}
+                }, 50);
+            };
+
+            // Build Visual Reaction Summary
+            data.reactants.forEach((r, idx) => {
+                if (idx > 0) summary.innerHTML += `<span class="plus">+</span>`;
+                const id = `sum_r_${r.id}`;
+                summary.innerHTML += `<canvas id="${id}" width="120" height="120"></canvas>`;
+                drawStructure(r.smiles, id, 120);
+            });
+
+            summary.innerHTML += `<span class="arrow">⟶</span>`;
+
+            data.products.forEach((p, idx) => {
+                if (idx > 0) summary.innerHTML += `<span class="plus">+</span>`;
+                const id = `sum_p_${p.id}`;
+                summary.innerHTML += `<canvas id="${id}" width="120" height="120"></canvas>`;
+                drawStructure(p.smiles, id, 120);
+            });
+
+            // Build Tables
+            data.reactants.forEach((r) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${r.eq || '-'}</td>
+                    <td><canvas id="rtab_${r.id}" width="80" height="80"></canvas></td>
+                    <td><b>${r.name || '-'}</b></td>
+                    <td style="color:#666;">${r.mw > 0 ? r.mw.toFixed(2) : '-'}</td>
+                    <td>${r.mmol ? r.mmol.toFixed(2) : '-'}</td>
+                    <td>${r.mass ? r.mass.toFixed(1) : '-'}</td>
+                `;
+                rTbody.appendChild(tr); drawStructure(r.smiles, `rtab_${r.id}`, 80);
+            });
+
+            data.products.forEach((p) => {
+                const tr = document.createElement('tr');
+                let yieldClass = p.yield ? (p.yield >= 80 ? 'yield-good' : (p.yield <= 30 ? 'yield-bad' : 'yield-warn')) : '';
+
+                tr.innerHTML = `
+                    <td>${p.eq || '-'}</td>
+                    <td><canvas id="ptab_${p.id}" width="80" height="80"></canvas></td>
+                    <td><b>${p.name || '-'}</b></td>
+                    <td style="color:#666;">${p.mw > 0 ? p.mw.toFixed(2) : '-'}</td>
+                    <td>${p.mmol_isolated ? p.mmol_isolated.toFixed(2) : (p.theory_mmol ? `<span style="color:#999">(${p.theory_mmol.toFixed(2)})</span>` : '-')}</td>
+                    <td>${p.mass_isolated ? p.mass_isolated.toFixed(1) : '-'}</td>
+                    <td class="${yieldClass}">${p.yield ? p.yield + '%' : '-'}</td>
+                `;
+                pTbody.appendChild(tr); drawStructure(p.smiles, `ptab_${p.id}`, 80);
+            });
+        }
+
+        function openInEditor() {
+            const currentUrl = window.location.href.split('#')[0];
+            const editorUrl = currentUrl.replace('elnviewer.html', 'app.html') + rawHash;
+            window.location.href = editorUrl;
+        }
+
+        function showError(msg) {
+            document.getElementById('reactants-table').style.display = 'none';
+            document.getElementById('products-table').style.display = 'none';
+            document.getElementById('reaction-summary').style.display = 'none';
+            const msgEl = document.getElementById('error-msg');
+            msgEl.innerText = msg; msgEl.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
