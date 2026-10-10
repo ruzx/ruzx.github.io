@@ -3,38 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>ChemEdit Molecule Viewer</title>
-    <!-- Pico.css makes basic HTML look beautiful automatically -->
+    <title>ChemEdit Viewer</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
-    <!-- SmilesDrawer for rendering -->
     <script src="https://unpkg.com/smiles-drawer@2.1.8/dist/smiles-drawer.min.js"></script>
     <style>
-        body { padding-top: 50px; }
-        .molecule-container { display: flex; justify-content: center; background: white; padding: 20px; border-radius: 10px; border: 1px solid #ddd; margin-bottom: 30px; }
-        .promo-box { text-align: center; background: #f8f9fa; padding: 30px; border-radius: 10px; }
+        body { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 90vh; background: #fbfbfb; }
+        .molecule-box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #eee; margin-bottom: 20px; text-align: center; }
+        .footer-promo { font-size: 0.9em; color: #666; text-align: center; }
+        .footer-promo a { color: #167782; text-decoration: none; font-weight: bold; }
     </style>
 </head>
 <body>
-    <main class="container">
-        <h2 style="text-align: center;">Shared Chemical Structure</h2>
-        
-        <div class="molecule-container">
-            <canvas id="molecule-canvas" width="500" height="500"></canvas>
-            <div id="error-msg" style="display:none; color: red;">Invalid SMILES string.</div>
+    <main class="container" style="max-width: 600px;">
+        <div class="molecule-box">
+            <h4 style="color: #333; margin-bottom: 10px;">Shared Structure</h4>
+            <canvas id="molecule-canvas" width="400" height="400"></canvas>
+            <div id="error-msg" style="display:none; color: #d9534f; padding: 20px;">Invalid SMILES string.</div>
         </div>
 
-        <article class="promo-box">
-            <h4>Generated via ChemEdit for Obsidian</h4>
-            <p>This molecule was shared by a user of <strong>ChemEdit</strong>, an advanced electronic lab notebook plugin for Obsidian.</p>
-            <hr>
-            <p>Developed by <strong>Ruzal Sitdikov</strong>. I am a developer/chemist currently open to new work opportunities!</p>
-            <div class="grid">
-                <!-- Replace these links with your actual links later -->
-                <a href="https://linkedin.com/in/YOUR_LINKEDIN" role="button" target="_blank">Connect on LinkedIn</a>
-                <a href="/" role="button" class="secondary">View my Portfolio & CV</a>
-                <a href="https://github.com/katananananna/obsidian-chemedit" role="button" class="contrast" target="_blank">Get ChemEdit</a>
-            </div>
-        </article>
+        <div class="footer-promo">
+            <p>Shared via <a href="https://github.com/katananananna/obsidian-chemedit" target="_blank">ChemEdit</a></p>
+            <p>Created by <a href="/">Ruzal Sitdikov</a></p>
+        </div>
     </main>
 
     <script>
@@ -42,7 +32,7 @@
             const hash = window.location.hash;
             if (hash.startsWith('#smi=')) {
                 const smiles = decodeURIComponent(hash.substring(5));
-                const options = { width: 500, height: 500, compactDrawing: false };
+                const options = { width: 400, height: 400, compactDrawing: false };
                 const smilesDrawer = new SmilesDrawer.Drawer(options);
                 
                 SmilesDrawer.parse(smiles, function(tree) {
@@ -50,11 +40,10 @@
                 }, function(err) {
                     document.getElementById('molecule-canvas').style.display = 'none';
                     document.getElementById('error-msg').style.display = 'block';
-                    console.error(err);
                 });
             } else {
                 document.getElementById('molecule-canvas').style.display = 'none';
-                document.getElementById('error-msg').innerText = "No molecule data provided in the link.";
+                document.getElementById('error-msg').innerText = "No molecule data provided.";
                 document.getElementById('error-msg').style.display = 'block';
             }
         });
