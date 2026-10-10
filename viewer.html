@@ -4,49 +4,123 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>ChemEdit Viewer</title>
+    <!-- CSS Framework -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+    
+    <!-- 2D Renderer (Bug fixed: SmiDrawer) -->
     <script src="https://unpkg.com/smiles-drawer@2.1.8/dist/smiles-drawer.min.js"></script>
+    
+    <!-- Interactive Molecule Editor (JSME) -->
+    <script type="text/javascript" src="https://jsme-editor.github.io/dist/jsme/jsme.nocache.js"></script>
+    
     <style>
         body { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 90vh; background: #fbfbfb; }
-        .molecule-box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #eee; margin-bottom: 20px; text-align: center; }
+        .molecule-box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #eee; margin-bottom: 20px; text-align: center; width: 100%; max-width: 500px; }
         .footer-promo { font-size: 0.9em; color: #666; text-align: center; }
         .footer-promo a { color: #167782; text-decoration: none; font-weight: bold; }
+        #jsme_container { width: 100%; height: 350px; display: none; }
+        .toolbar { display: flex; justify-content: center; gap: 10px; margin-top: 15px; }
     </style>
 </head>
 <body>
     <main class="container" style="max-width: 600px;">
         <div class="molecule-box">
-            <h4 style="color: #333; margin-bottom: 10px;">Shared Structure</h4>
+            <h4 id="title" style="color: #333; margin-bottom: 10px;">Shared Structure</h4>
+            
+            <!-- Static Canvas Viewer -->
             <canvas id="molecule-canvas" width="400" height="400"></canvas>
+            
+            <!-- Interactive Editor -->
+            <div id="jsme_container"></div>
+
             <div id="error-msg" style="display:none; color: #d9534f; padding: 20px;">Invalid SMILES string.</div>
+
+            <!-- Toolbar -->
+            <div class="toolbar">
+                <button id="edit-btn" class="outline" style="padding: 4px 12px; font-size: 14px;">✏️ Edit Structure</button>
+                <button id="copy-btn" class="outline" style="padding: 4px 12px; font-size: 14px; display: none;">📋 Copy New SMILES</button>
+            </div>
         </div>
 
         <div class="footer-promo">
-            <p>Shared via <a href="https://github.com/katananananna/obsidian-chemedit" target="_blank">ChemEdit</a></p>
-            <p>Created by <a href="/">Ruzal Sitdikov</a></p>
+            Shared via <a href="https://github.com/katananananna/obsidian-chemedit" target="_blank">ChemEdit</a> • 
+            <a href="/about.html">About</a>
         </div>
     </main>
 
     <script>
+        let currentSmiles = "";
+        let jsmeApplet = null;
+
+        // Required callback for JSME editor
+        function jsmeOnLoad() {
+            // Applet is loaded into memory, waiting for the user to click "Edit"
+        }
+
         document.addEventListener("DOMContentLoaded", function() {
             const hash = window.location.hash;
+            
+            // Load structure from URL
             if (hash.startsWith('#smi=')) {
-                const smiles = decodeURIComponent(hash.substring(5));
-                const options = { width: 400, height: 400, compactDrawing: false };
-                const smilesDrawer = new SmilesDrawer.Drawer(options);
-                
-                SmilesDrawer.parse(smiles, function(tree) {
-                    smilesDrawer.draw(tree, 'molecule-canvas', 'light', false);
-                }, function(err) {
-                    document.getElementById('molecule-canvas').style.display = 'none';
-                    document.getElementById('error-msg').style.display = 'block';
-                });
+                currentSmiles = decodeURIComponent(hash.substring(5));
+                drawSmiles(currentSmiles);
             } else {
-                document.getElementById('molecule-canvas').style.display = 'none';
-                document.getElementById('error-msg').innerText = "No molecule data provided.";
-                document.getElementById('error-msg').style.display = 'block';
+                showError("No molecule data provided in the link.");
             }
+
+            // Edit Button Click Logic
+            document.getElementById('edit-btn').addEventListener('click', function() {
+                // Hide static canvas, show editor
+                document.getElementById('molecule-canvas').style.display = 'none';
+                this.style.display = 'none'; // hide edit button
+                
+                document.getElementById('jsme_container').style.display = 'block';
+                document.getElementById('copy-btn').style.display = 'inline-block';
+                document.getElementById('title').innerText = "Edit Structure";
+
+                // Initialize editor if it hasn't been yet
+                if (!jsmeApplet) {
+                    jsmeApplet = new JSApplet.JSME("jsme_container", "100%", "350px");
+                }
+                // Load the SMILES into the editor
+                jsmeApplet.readGenericMolecularInput(currentSmiles);
+            });
+
+            // Copy Button Click Logic
+            document.getElementById('copy-btn').addEventListener('click', function() {
+                if (jsmeApplet) {
+                    const newSmiles = jsmeApplet.smiles();
+                    navigator.clipboard.writeText(newSmiles);
+                    const originalText = this.innerText;
+                    this.innerText = "✅ Copied!";
+                    setTimeout(() => { this.innerText = originalText; }, 2000);
+                }
+            });
         });
+
+        // Rendering function
+        function drawSmiles(smiles) {
+            try {
+                const options = { width: 400, height: 400, compactDrawing: false };
+                // FIX: SmiDrawer instead of SmilesDrawer
+                const drawer = new SmiDrawer.Drawer(options);
+                
+                SmiDrawer.parse(smiles, function(tree) {
+                    drawer.draw(tree, 'molecule-canvas', 'light', false);
+                }, function(err) {
+                    showError("Could not parse structure.");
+                });
+            } catch (e) {
+                showError("Rendering library error.");
+            }
+        }
+
+        function showError(msg) {
+            document.getElementById('molecule-canvas').style.display = 'none';
+            document.getElementById('edit-btn').style.display = 'none';
+            document.getElementById('error-msg').innerText = msg;
+            document.getElementById('error-msg').style.display = 'block';
+        }
     </script>
 </body>
 </html>
