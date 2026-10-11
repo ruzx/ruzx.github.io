@@ -3,45 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Ruzal Sitdikov</title>
+    <title>ChemEdit Documentation</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
     <style>
-        body { display: flex; flex-direction: column; min-height: 100vh; margin: 0; background: #fbfbfb; }
-        .main-container { flex-grow: 1; display: flex; align-items: center; justify-content: center; }
-        .card { text-align: center; max-width: 500px; width: 100%; padding: 40px 20px; }
-        .links a { display: block; margin-bottom: 10px; }
-        footer { text-align: center; padding: 20px; font-size: 12px; color: #888; border-top: 1px solid #ddd; background: #fbfbfb; }
+        body { background: #fbfbfb; display: flex; flex-direction: column; min-height: 100vh; margin: 0; }
+        
+        /* Navbar */
+        nav { background: #167782; color: white; padding: 0 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; margin-bottom: 20px; }
+        nav ul li { color: white; }
+        nav ul li a { color: white; font-weight: bold; text-decoration: none; transition: opacity 0.2s; }
+        nav ul li a:hover { opacity: 0.8; }
+        
+        /* Docs Layout */
+        .docs-container { max-width: 1200px; margin: 0 auto; display: flex; gap: 40px; padding: 0 20px; align-items: flex-start; flex-grow: 1; }
+        
+        /* Left Sidebar */
+        .sidebar { width: 250px; flex-shrink: 0; position: sticky; top: 80px; height: calc(100vh - 100px); overflow-y: auto; padding-right: 10px; border-right: 1px solid #ddd; }
+        .sidebar ul { list-style: none; padding: 0; margin: 0; }
+        .sidebar li { margin-bottom: 10px; }
+        .sidebar a { color: #555; text-decoration: none; font-size: 14px; display: block; padding: 5px 10px; border-radius: 6px; transition: background 0.2s; }
+        .sidebar a:hover { background: #eee; color: #167782; }
+        .sidebar .header { font-size: 11px; text-transform: uppercase; color: #999; font-weight: bold; margin: 20px 0 10px 0; letter-spacing: 0.5px; }
+        
+        /* Main Content */
+        .content { flex-grow: 1; background: white; padding: 30px 40px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid #ddd; margin-bottom: 40px; }
+        .content section { margin-bottom: 50px; scroll-margin-top: 100px; }
+        .content h2 { color: #167782; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; margin-bottom: 20px; font-size: 1.5em; }
+        .content h3 { margin-top: 25px; font-size: 1.2em; }
+        .content code { background: #f4f4f4; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; color: #d9534f; }
+        .content pre { background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 8px; overflow-x: auto; font-size: 13px; }
+        
+        /* Footer */
+        footer { text-align: center; padding: 20px; font-size: 12px; color: #888; border-top: 1px solid #ddd; background: #fbfbfb; margin-top: auto; }
         footer a { color: #167782; text-decoration: none; }
+        
+        /* Mobile responsiveness */
+        @media (max-width: 800px) {
+            .docs-container { flex-direction: column; }
+            .sidebar { width: 100%; position: static; height: auto; border-right: none; border-bottom: 1px solid #ddd; padding-bottom: 20px; margin-bottom: 20px; }
+        }
     </style>
 </head>
 <body>
-    <div class="main-container">
-        <main class="container card">
-            <h1 style="margin-bottom: 5px; font-size: 2em; color: #333;">Ruzal Sitdikov, Ph.D.</h1>
-            <p style="color: #666; margin-bottom: 30px;">Research Chemist | Sweden</p>
-            
-            <div class="links">
-                <a href="/cv.pdf" role="button" class="outline" target="_blank">📄 Curriculum Vitae</a>
-                <a href="https://linkedin.com/in/ruzal" role="button" class="outline" target="_blank">💼 LinkedIn</a>
-                <a href="https://scholar.google.com/citations?user=YOUR_SCHOLAR_ID" role="button" class="outline" target="_blank">🎓 Google Scholar</a>
-                <a href="mailto:temspace@gmail.com" role="button" class="outline">✉️ Contact</a>
-            </div>
 
-            <hr style="margin: 30px 0; border: 0; border-top: 1px solid #eee;">
+    <nav class="container-fluid">
+        <ul>
+            <li><strong style="font-size: 1.2em;">🧪 ChemEdit Docs</strong></li>
+        </ul>
+        <ul>
+            <li><a href="/app.html">Web ELN</a></li>
+            <li><a href="/about.html">About</a></li>
+            <li><a href="https://github.com/ruzx/obsidian-chemedit" target="_blank">GitHub</a></li>
+        </ul>
+    </nav>
 
-            <h3 style="font-size: 1.2em; margin-bottom: 10px; color: #333;">Software Projects</h3>
-            <a href="https://community.obsidian.md/plugins/chemedit" role="button" target="_blank" style="background: #167782; border-color: #167782;">🧪 ChemEdit for Obsidian</a>
-            <p style="font-size: 0.85em; color: #666; margin-top: 10px; margin-bottom: 20px;">An electronic lab notebook plugin for synthetic chemists.</p>
+    <div class="docs-container">
+        
+        <!-- SIDEBAR NAVIGATION -->
+        <aside class="sidebar">
+            <ul>
+                <div class="header">Getting Started</div>
+                <li><a href="#intro">Introduction & Install</a></li>
+                
+                <div class="header">Drawing & Rendering</div>
+                <li><a href="#draw">Drawing Molecules</a></li>
+                <li><a href="#inline">Inline Structures</a></li>
+                
+                <div class="header">Electronic Lab Notebook</div>
+                <li><a href="#eln">The ELN Block</a></li>
+                <li><a href="#stoichiometry">Stoichiometry Engine</a></li>
+                
+                <div class="header">LIMS & Dashboards</div>
+                <li><a href="#inventory">Inventory & Orders</a></li>
+                <li><a href="#pathways">Synthesis Pathways</a></li>
+                
+                <div class="header">Sharing</div>
+                <li><a href="#share">Web Sharing</a></li>
+            </ul>
+        </aside>
+
+        <!-- MAIN DOCUMENTATION CONTENT -->
+        <main class="content">
             
-            <div style="display: flex; gap: 10px; justify-content: center;">
-                <a href="/chemedit.html" role="button" class="secondary outline" style="font-size: 13px;">Documentation</a>
-                <a href="/app.html" role="button" class="secondary outline" style="font-size: 13px;">Web ELN</a>
-            </div>
+            <section id="intro">
+                <h2>Introduction</h2>
+                <p>ChemEdit is an Electronic Lab Notebook (ELN) and chemical drawing plugin for Obsidian. It provides tools for synthetic chemists to draw molecules, calculate stoichiometry, track inventory, and map synthesis pathways entirely offline within their local vault.</p>
+                
+                <h3>Installation</h3>
+                <p>ChemEdit is available in the official Obsidian Community Plugins directory.</p>
+                <ol>
+                    <li>Open Obsidian Settings -> Community Plugins.</li>
+                    <li>Click "Browse" and search for <strong>ChemEdit</strong>.</li>
+                    <li>Or, click this direct link: <a href="https://community.obsidian.md/plugins/chemedit" target="_blank">Install ChemEdit</a>.</li>
+                    <li>Click <strong>Install</strong>, then <strong>Enable</strong>.</li>
+                </ol>
+            </section>
+
+            <section id="draw">
+                <h2>Drawing Molecules</h2>
+                <p>ChemEdit embeds Ketcher, allowing you to draw chemical structures natively inside Obsidian.</p>
+                <ul>
+                    <li><strong>New Drawing:</strong> Click the Hexagon icon in the left ribbon to open the canvas.</li>
+                    <li><strong>Supported Formats:</strong> The plugin supports saving as SMILES, <code>.mol</code>, <code>.cdxml</code>, and <code>.ket</code>.</li>
+                    <li><strong>Editing:</strong> Double-click any rendered chemical structure in your notes to re-open the editor.</li>
+                </ul>
+            </section>
+
+            <section id="inline">
+                <h2>Inline Structures</h2>
+                <p>Molecules can be rendered directly inside text or Markdown tables. Use the prefix <code>$smiles=</code> followed by your SMILES string.</p>
+                <pre>The reaction yielded $smiles=CC(=O)OC1=CC=CC=C1C(=O)O as a solid.</pre>
+            </section>
+
+            <section id="eln">
+                <h2>The ELN Block</h2>
+                <p>To record a reaction, open the Command Palette (Ctrl+P), select <strong>ChemEdit: Open ELN Dashboard</strong>, and click <strong>+ New Experiment</strong>. This creates a YAML block:</p>
+<pre>```eln
+status: Planned
+reactants:
+  - smiles: "CC1=CC(=O)CCC1"
+    eq: 1
+    mass: 150
+products:
+  - smiles: "CC1=CC(O)CCC1"
+```</pre>
+                <p>Obsidian parses this block and renders a reaction scheme alongside a stoichiometry table.</p>
+            </section>
+
+            <section id="stoichiometry">
+                <h2>Stoichiometry Engine</h2>
+                <p>The ELN block calculates reaction values automatically:</p>
+                <ul>
+                    <li><strong>Molecular Weights:</strong> Calculated offline using OpenChemLib or Ketcher's engine.</li>
+                    <li><strong>Calculations:</strong> Double-click table cells to input a mass. The mmols and theoretical yields calculate based on the limiting reagent (eq = 1).</li>
+                    <li><strong>Yields:</strong> Enter the isolated mass in the Products table to generate a percentage yield.</li>
+                </ul>
+            </section>
+
+            <section id="inventory">
+                <h2>Inventory & Orders</h2>
+                <p>By adding specific tags to your notes (e.g., <code>tags: [inventory]</code> or <code>tags: [order]</code>), the plugin aggregates them into central dashboards. Open these dashboards from the Command Palette to view your stock and active requests.</p>
+            </section>
+
+            <section id="pathways">
+                <h2>Synthesis Pathways</h2>
+                <p>ChemEdit maps relationships between experiments based on their reactants and products.</p>
+                <p>Insert the code block <code>```synthesis-map```</code> in a note. The plugin will scan the folder and generate a flowchart of the project.</p>
+            </section>
+
+            <section id="share">
+                <h2>Web Sharing</h2>
+                <p>To share a reaction with someone who does not use Obsidian, click the <strong>🔗 Share</strong> button on the ELN block. This generates a URL containing the serialized stoichiometry data. The recipient can view the reaction and edit the equivalents in their browser.</p>
+                <p>You can test the web version here: <a href="/app.html">ChemEdit Web ELN</a>.</p>
+            </section>
+
         </main>
     </div>
 
     <footer>
-        &copy; 2026 Ruzal Sitdikov &bull; <a href="/about.html">About</a>
+        &copy; 2026 Ruzal Sitdikov &bull; <a href="/about.html">About</a> &bull; <a href="https://github.com/ruzx/obsidian-chemedit" target="_blank">Source Code</a>
     </footer>
+
+    <!-- Smooth Scrolling Script -->
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
 </body>
 </html>
