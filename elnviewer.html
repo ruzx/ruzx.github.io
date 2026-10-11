@@ -22,7 +22,7 @@
         .yield-bad { color: #d9534f; font-weight: bold; }
         .yield-warn { color: #ffc107; font-weight: bold; }
         
-        .reaction-summary { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px; border: 1px solid #eee; flex-wrap: wrap; }
+        .reaction-summary { display: flex; align-items: center; justify-content: center; margin-bottom: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px; border: 1px solid #eee; flex-wrap: wrap; }
         .arrow { font-size: 30px; font-weight: bold; color: #167782; padding: 0 15px; }
         .plus { font-size: 24px; font-weight: bold; color: #999; padding: 0 10px; }
     </style>
@@ -30,8 +30,11 @@
 <body>
     <nav>
         <div style="max-width: 1000px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-size: 1.2em;">🧪 Shared Experiment</span>
-            <span><a href="/about.html">About</a> | <a href="https://github.com/ruzx/obsidian-chemedit" target="_blank">ChemEdit for Obsidian</a></span>
+            <span style="font-size: 1.2em;">🧪 Shared ELN</span>
+            <span>
+                <a href="/about.html">About</a> &nbsp;|&nbsp; 
+                <a href="https://github.com/ruzx/obsidian-chemedit" target="_blank">GitHub</a>
+            </span>
         </div>
     </nav>
 
@@ -40,7 +43,7 @@
             
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <h3 style="margin: 0;">Stoichiometry Report</h3>
-                <button onclick="openInEditor()" class="outline" style="padding: 6px 15px; margin: 0;">✏️ Edit & Recalculate</button>
+                <button onclick="openInEditor()" class="outline" style="padding: 6px 15px; margin: 0; width: auto;">✏️ Edit & Recalculate</button>
             </div>
 
             <!-- Visual Reaction Header -->
@@ -91,30 +94,44 @@
             const pTbody = document.querySelector('#products-table tbody');
             const summary = document.getElementById('reaction-summary');
             
-            const drawStructure = (smiles, id, size) => {
+            const drawStructure = (smiles, targetElement, size) => {
+                if (!smiles) return;
                 setTimeout(() => {
                     try {
                         const drawer = new SmiDrawer.Drawer({ width: size, height: size, compactDrawing: false });
-                        SmiDrawer.parse(smiles, tree => drawer.draw(tree, id, 'light', false));
-                    } catch(e) {}
+                        SmiDrawer.parse(smiles, tree => drawer.draw(tree, targetElement, 'light', false));
+                    } catch(e) { console.error("Failed drawing:", e); }
                 }, 50);
             };
 
-            // Build Visual Reaction Summary
+            // Safely build DOM for Visual Reaction Summary (No innerHTML += to preserve canvases)
+            summary.innerHTML = "";
+            
             data.reactants.forEach((r, idx) => {
-                if (idx > 0) summary.innerHTML += `<span class="plus">+</span>`;
-                const id = `sum_r_${r.id}`;
-                summary.innerHTML += `<canvas id="${id}" width="120" height="120"></canvas>`;
-                drawStructure(r.smiles, id, 120);
+                if (idx > 0) {
+                    const plus = document.createElement("span"); plus.className = "plus"; plus.innerText = "+";
+                    summary.appendChild(plus);
+                }
+                const canvas = document.createElement("canvas");
+                canvas.width = 120; canvas.height = 120;
+                summary.appendChild(canvas);
+                drawStructure(r.smiles, canvas, 120);
             });
 
-            summary.innerHTML += `<span class="arrow">⟶</span>`;
+            if (data.reactants.length > 0 || data.products.length > 0) {
+                const arrow = document.createElement("span"); arrow.className = "arrow"; arrow.innerText = "⟶";
+                summary.appendChild(arrow);
+            }
 
             data.products.forEach((p, idx) => {
-                if (idx > 0) summary.innerHTML += `<span class="plus">+</span>`;
-                const id = `sum_p_${p.id}`;
-                summary.innerHTML += `<canvas id="${id}" width="120" height="120"></canvas>`;
-                drawStructure(p.smiles, id, 120);
+                if (idx > 0) {
+                    const plus = document.createElement("span"); plus.className = "plus"; plus.innerText = "+";
+                    summary.appendChild(plus);
+                }
+                const canvas = document.createElement("canvas");
+                canvas.width = 120; canvas.height = 120;
+                summary.appendChild(canvas);
+                drawStructure(p.smiles, canvas, 120);
             });
 
             // Build Tables
@@ -128,7 +145,8 @@
                     <td>${r.mmol ? r.mmol.toFixed(2) : '-'}</td>
                     <td>${r.mass ? r.mass.toFixed(1) : '-'}</td>
                 `;
-                rTbody.appendChild(tr); drawStructure(r.smiles, `rtab_${r.id}`, 80);
+                rTbody.appendChild(tr); 
+                drawStructure(r.smiles, document.getElementById(`rtab_${r.id}`), 80);
             });
 
             data.products.forEach((p) => {
@@ -144,7 +162,8 @@
                     <td>${p.mass_isolated ? p.mass_isolated.toFixed(1) : '-'}</td>
                     <td class="${yieldClass}">${p.yield ? p.yield + '%' : '-'}</td>
                 `;
-                pTbody.appendChild(tr); drawStructure(p.smiles, `ptab_${p.id}`, 80);
+                pTbody.appendChild(tr); 
+                drawStructure(p.smiles, document.getElementById(`ptab_${p.id}`), 80);
             });
         }
 
