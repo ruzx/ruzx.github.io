@@ -5,15 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Shared Experiment</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/smiles-drawer@2.1.8/dist/smiles-drawer.min.js"></script>
+    
+    <!-- Using ultra-stable v1.0.10 -->
+    <script src="https://unpkg.com/smiles-drawer@1.0.10/dist/smiles-drawer.min.js"></script>
     
     <style>
         body { background: #f4f7f8; }
-        nav { background: #167782; color: white; padding: 12px 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        nav a { color: white; font-weight: bold; text-decoration: none; }
-        .nav-container { max-width: 1000px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-        .nav-right { display: flex; gap: 20px; align-items: center; }
-
+        
+        /* Navbar Spacing Fix */
+        nav { background: #167782; color: white; padding: 0 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        nav ul li { color: white; }
+        nav ul li a { color: white; font-weight: bold; text-decoration: none; transition: opacity 0.2s; }
+        nav ul li a:hover { opacity: 0.8; }
+        
         .container { max-width: 1000px; margin: 0 auto; }
         .card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #ddd; margin-bottom: 20px; }
         
@@ -31,15 +35,16 @@
     </style>
 </head>
 <body>
-    <nav>
-        <div class="nav-container">
-            <span style="font-size: 1.2em; font-weight: 800;">🧪 Shared ELN</span>
-            <div class="nav-right">
-                <a href="#" onclick="copyForObsidian()" title="Copy to Obsidian">📋 Copy for Obsidian</a>
-                <a href="/about.html">About</a>
-                <a href="https://github.com/ruzx/obsidian-chemedit" target="_blank">GitHub</a>
-            </div>
-        </div>
+    <!-- Properly spaced navigation -->
+    <nav class="container-fluid" style="max-width: 1000px; margin: 0 auto 20px auto;">
+        <ul>
+            <li><strong style="font-size: 1.2em;">🧪 Shared ELN</strong></li>
+        </ul>
+        <ul>
+            <li><a href="#" onclick="copyForObsidian()">📋 Copy for Obsidian</a></li>
+            <li><a href="/about.html">About</a></li>
+            <li><a href="https://github.com/ruzx/obsidian-chemedit" target="_blank">GitHub</a></li>
+        </ul>
     </nav>
 
     <div class="container">
@@ -50,6 +55,7 @@
                 <button onclick="openInEditor()" class="outline" style="padding: 6px 15px; margin: 0; width: auto;">✏️ Edit & Recalculate</button>
             </div>
 
+            <!-- Visual Reaction Header -->
             <div id="reaction-summary" class="reaction-summary"></div>
 
             <h5 style="color: #444; border-bottom: 2px solid #ddd; padding-bottom: 5px;">Reactants</h5>
@@ -121,10 +127,10 @@
                 if (!smiles) return;
                 setTimeout(() => {
                     try {
-                        const drawer = new SmiDrawer.Drawer({ width: size, height: size, compactDrawing: false });
-                        SmiDrawer.parse(smiles, tree => drawer.draw(tree, targetElement, 'light', false));
+                        const drawer = new SmilesDrawer.Drawer({ width: size, height: size, compactDrawing: false });
+                        SmilesDrawer.parse(smiles, tree => drawer.draw(tree, targetElement, 'light', false));
                     } catch(e) { console.error("Failed drawing:", e); }
-                }, 50);
+                }, 100);
             };
 
             summary.innerHTML = "";
