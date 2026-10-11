@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Shared Experiment</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
-    <script src="https://unpkg.com/smiles-drawer@2.1.8/dist/smiles-drawer.min.js"></script>
+    
+    <!-- Using jsdelivr to avoid Microsoft Edge tracking warnings -->
+    <script src="https://cdn.jsdelivr.net/npm/smiles-drawer@2.1.8/dist/smiles-drawer.min.js"></script>
     
     <style>
         body { background: #f4f7f8; }
@@ -98,13 +100,13 @@
                 if (!smiles) return;
                 setTimeout(() => {
                     try {
-                        const drawer = new SmiDrawer.Drawer({ width: size, height: size, compactDrawing: false });
-                        SmiDrawer.parse(smiles, tree => drawer.draw(tree, targetElement, 'light', false));
+                        // FIXED: Replaced SmiDrawer with SmilesDrawer
+                        const drawer = new SmilesDrawer.Drawer({ width: size, height: size, compactDrawing: false });
+                        SmilesDrawer.parse(smiles, tree => drawer.draw(tree, targetElement, 'light', false));
                     } catch(e) { console.error("Failed drawing:", e); }
                 }, 50);
             };
 
-            // Safely build DOM for Visual Reaction Summary (No innerHTML += to preserve canvases)
             summary.innerHTML = "";
             
             data.reactants.forEach((r, idx) => {
@@ -134,7 +136,6 @@
                 drawStructure(p.smiles, canvas, 120);
             });
 
-            // Build Tables
             data.reactants.forEach((r) => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
