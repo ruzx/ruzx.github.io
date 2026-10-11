@@ -1,33 +1,45 @@
-<!DOCTYPE html>
-<html lang="en" data-theme="light">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Ruzal Sitdikov</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
-    <style>
-        body { display: flex; align-items: center; justify-content: center; min-height: 80vh; }
-        .card { text-align: center; max-width: 500px; width: 100%; padding: 20px; }
-        .links a { display: block; margin-bottom: 10px; }
-    </style>
-</head>
-<body>
-    <main class="container card">
-        <h1 style="margin-bottom: 5px;">Ruzal Sitdikov</h1>
-        <p style="color: #666; margin-bottom: 30px;">Research Chemist | Sweden</p>
-        
-        <div class="links">
-            <a href="/cv.pdf" role="button" class="outline" target="_blank">📄 View Curriculum Vitae</a>
-            <a href="https://linkedin.com/in/ruzal" role="button" class="outline" target="_blank">💼 LinkedIn Profile</a>
-            <a href="https://scholar.google.com/citations?user=3sHiXqAAAAAJ&hl" role="button" class="outline" target="_blank">🎓 Google Scholar</a>
-            <a href="mailto:ruzal@kth.se" role="button" class="outline">✉️ Contact Me</a>
-        </div>
+---
+layout: default
+title: Ruzal Sitdikov, Ph.D.
+---
 
-        <hr style="margin: 30px 0;">
+<h1 style="margin-bottom: 5px; font-size: 2em; color: #333;">Ruzal Sitdikov</h1>
+<p style="color: #666; margin-bottom: 30px;">Research Chemist</p>
 
-        <h3 style="font-size: 1.2em; margin-bottom: 10px;">Open-Source</h3>
-        <a href="https://github.com/ruzx/obsidian-chemedit" role="button" target="_blank">🧪 ChemEdit for Obsidian</a>
-        <p style="font-size: 0.85em; color: #666; margin-top: 10px;">An electronic lab notebook plugin for synthetic chemists.</p>
-    </main>
-</body>
-</html>
+<div class="links">
+    <a href="/cv.pdf" target="_blank">📄 Curriculum Vitae</a>
+    <a href="https://linkedin.com/in/ruzal" target="_blank">💼 LinkedIn</a>
+    <a href="https://scholar.google.com/citations?user=3sHiXqAAAAAJ&hl" target="_blank">🎓 Google Scholar</a>
+    <a href="mailto:temspace@gmail.com">✉️ Contact</a>
+</div>
+
+<hr style="margin: 30px 0; border: 0; border-top: 1px solid #eee;">
+
+<h3 style="font-size: 1.2em; margin-bottom: 10px; color: #333;">Plugin Projects</h3>
+<a href="https://community.obsidian.md/plugins/chemedit" target="_blank" style="font-weight: bold; color: #167782;">🧪 ChemEdit for Obsidian</a>
+<p style="font-size: 0.9em; color: #666; margin-top: 5px; margin-bottom: 15px;">An electronic lab notebook plugin for synthetic chemists.</p>
+
+<div style="display: flex; gap: 10px; margin-bottom: 40px;">
+    <a href="/chemedit.html" role="button" class="secondary outline" style="font-size: 12px; padding: 4px 12px;">Documentation</a>
+    <a href="/app.html" role="button" class="secondary outline" style="font-size: 12px; padding: 4px 12px;">Web ELN</a>
+</div>
+
+<!-- AUTOMATIC BLOG LIST -->
+<div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid #f0f0f0; margin-bottom: 20px; padding-bottom: 5px;">
+    <h3 style="margin: 0; font-size: 1.2em; color: #333;">Notes & Updates</h3>
+    <a href="/feed.xml" style="font-size: 0.8em; color: #d9534f; font-weight: bold; text-decoration: none;">📡 RSS Feed</a>
+</div>
+
+<ul class="post-list">
+  {% for post in site.posts %}
+    <li>
+      <span class="post-date">{{ post.date | date: "%B %d, %Y" }}</span>
+      <h4><a href="{{ post.url }}">{{ post.title }}</a></h4>
+      <p style="font-size: 0.9em; color: #555; margin: 0;">{{ post.excerpt | strip_html | truncatewords: 25 }}</p>
+    </li>
+  {% endfor %}
+</ul>
+
+{% if site.posts.size == 0 %}
+    <p style="font-style: italic; color: #888;">No posts yet.</p>
+{% endif %}
