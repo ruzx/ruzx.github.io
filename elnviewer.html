@@ -5,14 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Shared Experiment</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
-    
-    <!-- Using jsdelivr to avoid Microsoft Edge tracking warnings -->
     <script src="https://cdn.jsdelivr.net/npm/smiles-drawer@2.1.8/dist/smiles-drawer.min.js"></script>
     
     <style>
         body { background: #f4f7f8; }
-        nav { background: #167782; color: white; padding: 10px 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        nav { background: #167782; color: white; padding: 12px 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; }
         nav a { color: white; font-weight: bold; text-decoration: none; }
+        .nav-container { max-width: 1000px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .nav-right { display: flex; gap: 20px; align-items: center; }
+
         .container { max-width: 1000px; margin: 0 auto; }
         .card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #ddd; margin-bottom: 20px; }
         
@@ -31,12 +32,13 @@
 </head>
 <body>
     <nav>
-        <div style="max-width: 1000px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-size: 1.2em;">🧪 Shared ELN</span>
-            <span>
-                <a href="/about.html">About</a> &nbsp;|&nbsp; 
+        <div class="nav-container">
+            <span style="font-size: 1.2em; font-weight: 800;">🧪 Shared ELN</span>
+            <div class="nav-right">
+                <a href="#" onclick="copyForObsidian()" title="Copy to Obsidian">📋 Copy for Obsidian</a>
+                <a href="/about.html">About</a>
                 <a href="https://github.com/ruzx/obsidian-chemedit" target="_blank">GitHub</a>
-            </span>
+            </div>
         </div>
     </nav>
 
@@ -48,7 +50,6 @@
                 <button onclick="openInEditor()" class="outline" style="padding: 6px 15px; margin: 0; width: auto;">✏️ Edit & Recalculate</button>
             </div>
 
-            <!-- Visual Reaction Header -->
             <div id="reaction-summary" class="reaction-summary"></div>
 
             <h5 style="color: #444; border-bottom: 2px solid #ddd; padding-bottom: 5px;">Reactants</h5>
@@ -73,6 +74,7 @@
 
     <script>
         let rawHash = "";
+        let globalElnData = null;
 
         document.addEventListener("DOMContentLoaded", () => {
             const hash = window.location.hash;
@@ -81,8 +83,8 @@
                     rawHash = hash;
                     const b64 = hash.substring(5);
                     const jsonStr = decodeURIComponent(escape(atob(b64)));
-                    const elnData = JSON.parse(jsonStr);
-                    renderReport(elnData);
+                    globalElnData = JSON.parse(jsonStr);
+                    renderReport(globalElnData);
                 } catch (e) {
                     showError("Invalid or corrupted experiment link.");
                 }
@@ -90,6 +92,25 @@
                 showError("No experiment data provided.");
             }
         });
+
+        function copyForObsidian() {
+            if (!globalElnData) return;
+            let yaml = "```eln\nstatus: Planned\nreactants:\n";
+            (globalElnData.reactants || []).forEach(r => {
+                yaml += `  - smiles: "${r.smiles}"\n    name: "${r.name || ''}"\n    eq: ${r.eq || 1}\n`;
+                if (r.mass) yaml += `    mass: ${r.mass}\n`;
+                if (r.mmol && !r.mass) yaml += `    mmol: ${r.mmol}\n`;
+            });
+            yaml += "products:\n";
+            (globalElnData.products || []).forEach(p => {
+                yaml += `  - smiles: "${p.smiles}"\n    name: "${p.name || ''}"\n    eq: ${p.eq || 1}\n`;
+                if (p.mass_isolated) yaml += `    mass_isolated: ${p.mass_isolated}\n`;
+            });
+            yaml += "```\n";
+            
+            navigator.clipboard.writeText(yaml);
+            alert("Copied Obsidian code block to clipboard! Paste it into any Markdown file.");
+        }
 
         function renderReport(data) {
             const rTbody = document.querySelector('#reactants-table tbody');
@@ -100,9 +121,8 @@
                 if (!smiles) return;
                 setTimeout(() => {
                     try {
-                        // FIXED: Replaced SmiDrawer with SmilesDrawer
-                        const drawer = new SmilesDrawer.Drawer({ width: size, height: size, compactDrawing: false });
-                        SmilesDrawer.parse(smiles, tree => drawer.draw(tree, targetElement, 'light', false));
+                        const drawer = new SmiDrawer.Drawer({ width: size, height: size, compactDrawing: false });
+                        SmiDrawer.parse(smiles, tree => drawer.draw(tree, targetElement, 'light', false));
                     } catch(e) { console.error("Failed drawing:", e); }
                 }, 50);
             };
