@@ -6,15 +6,18 @@
     <title>ChemEdit Web ELN</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
     
-    <script src="https://cdn.jsdelivr.net/npm/smiles-drawer@2.1.8/dist/smiles-drawer.min.js"></script>
+    <!-- Using ultra-stable v1.0.10 -->
+    <script src="https://unpkg.com/smiles-drawer@1.0.10/dist/smiles-drawer.min.js"></script>
     <script type="text/javascript" src="https://jsme-editor.github.io/dist/jsme/jsme.nocache.js"></script>
     
     <style>
         body { background: #f4f7f8; }
-        nav { background: #167782; color: white; padding: 12px 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        nav a { color: white; font-weight: bold; text-decoration: none; }
-        .nav-container { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-        .nav-right { display: flex; gap: 20px; align-items: center; }
+        
+        /* Navbar Spacing Fix */
+        nav { background: #167782; color: white; padding: 0 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        nav ul li { color: white; }
+        nav ul li a { color: white; font-weight: bold; text-decoration: none; transition: opacity 0.2s; }
+        nav ul li a:hover { opacity: 0.8; }
         
         .dashboard { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; max-width: 1400px; margin: 0 auto; padding: 0 20px; }
         @media (max-width: 900px) { .dashboard { grid-template-columns: 1fr; } }
@@ -37,16 +40,17 @@
     </style>
 </head>
 <body>
-    <nav>
-        <div class="nav-container">
-            <span style="font-size: 1.2em; font-weight: 800;">🧪 ChemEdit ELN</span>
-            <div class="nav-right">
-                <a href="#" onclick="copyForObsidian()" title="Copy to Obsidian">📋 Copy for Obsidian</a>
-                <a href="#" onclick="shareELN()" title="Copy Share Link">🔗 Share</a>
-                <a href="/about.html">About</a>
-                <a href="https://github.com/ruzx/obsidian-chemedit" target="_blank">GitHub</a>
-            </div>
-        </div>
+    <!-- Properly spaced navigation -->
+    <nav class="container-fluid" style="max-width: 1400px; margin: 0 auto 20px auto;">
+        <ul>
+            <li><strong style="font-size: 1.2em;">🧪 ChemEdit ELN</strong></li>
+        </ul>
+        <ul>
+            <li><a href="#" onclick="copyForObsidian()">📋 Copy for Obsidian</a></li>
+            <li><a href="#" onclick="shareELN()">🔗 Share</a></li>
+            <li><a href="/about.html">About</a></li>
+            <li><a href="https://github.com/ruzx/obsidian-chemedit" target="_blank">GitHub</a></li>
+        </ul>
     </nav>
 
     <div class="dashboard">
@@ -234,10 +238,10 @@
                     try {
                         const targetEl = document.getElementById(id);
                         if (!targetEl) return;
-                        const drawer = new SmiDrawer.Drawer({ width: 80, height: 80, compactDrawing: false });
-                        SmiDrawer.parse(smiles, tree => drawer.draw(tree, targetEl, 'light', false));
+                        const drawer = new SmilesDrawer.Drawer({ width: 80, height: 80, compactDrawing: false });
+                        SmilesDrawer.parse(smiles, tree => drawer.draw(tree, targetEl, 'light', false));
                     } catch(e) { console.error("Render error:", e); }
-                }, 50);
+                }, 100);
             };
 
             elnData.reactants.forEach(r => {
