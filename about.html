@@ -3,31 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>About - Ruzal Sitdikov</title>
+    <title>Ruzal Sitdikov</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
     <style>
-        body { display: flex; align-items: center; justify-content: center; min-height: 80vh; }
-        .card { text-align: center; max-width: 500px; width: 100%; padding: 20px; }
+        body { display: flex; flex-direction: column; min-height: 100vh; margin: 0; background: #fbfbfb; }
+        .main-container { flex-grow: 1; display: flex; align-items: center; justify-content: center; }
+        .card { text-align: center; max-width: 500px; width: 100%; padding: 40px 20px; }
         .links a { display: block; margin-bottom: 10px; }
+        footer { text-align: center; padding: 20px; font-size: 12px; color: #888; border-top: 1px solid #ddd; background: #fbfbfb; }
+        footer a { color: #167782; text-decoration: none; }
     </style>
 </head>
 <body>
-    <main class="container card">
-        <h1 style="margin-bottom: 5px;">Ruzal Sitdikov</h1>
-        <p style="color: #666; margin-bottom: 30px;">Research Chemist | Sweden</p>
-        
-        <div class="links">
-            <!-- Ensure you upload your CV as cv.pdf to the github repo -->
-            <a href="/cv.pdf" role="button" class="outline" target="_blank">📄 View Curriculum Vitae</a>
-            <a href="https://linkedin.com/in/ruzal" role="button" class="outline" target="_blank">💼 LinkedIn Profile</a>
-            <a href="mailto:ruzal@kth.se" role="button" class="outline">✉️ Contact Me</a>
-        </div>
+    <div class="main-container">
+        <main class="container card">
+            <h1 style="margin-bottom: 5px; font-size: 2em; color: #333;">Ruzal Sitdikov, Ph.D.</h1>
+            <p style="color: #666; margin-bottom: 30px;">Research Chemist | Sweden</p>
+            
+            <div class="links">
+                <a href="/cv.pdf" role="button" class="outline" target="_blank">📄 Curriculum Vitae</a>
+                <a href="https://linkedin.com/in/ruzal" role="button" class="outline" target="_blank">💼 LinkedIn</a>
+                <a href="https://scholar.google.com/citations?user=3sHiXqAAAAAJ&hl" role="button" class="outline" target="_blank">🎓 Google Scholar</a>
+                <a href="mailto:temspace@gmail.com" role="button" class="outline">✉️ Contact</a>
+            </div>
 
-        <hr style="margin: 30px 0;">
+            <hr style="margin: 30px 0; border: 0; border-top: 1px solid #eee;">
 
-        <h3 style="font-size: 1.2em; margin-bottom: 10px;">ChemEdit</h3>
-        <p style="font-size: 0.85em; color: #666; margin-top: 10px;">An open-source electronic lab notebook plugin built for synthetic chemists.</p>
-        <a href="https://github.com/ruzx/obsidian-chemedit" role="button" target="_blank">🧪 Get ChemEdit for Obsidian</a>
-    </main>
+            <h3 style="font-size: 1.2em; margin-bottom: 10px; color: #333;">Software Projects</h3>
+            <a href="https://community.obsidian.md/plugins/chemedit" role="button" target="_blank" style="background: #167782; border-color: #167782;">🧪 ChemEdit for Obsidian</a>
+            <p style="font-size: 0.85em; color: #666; margin-top: 10px; margin-bottom: 20px;">An electronic lab notebook plugin for synthetic chemists.</p>
+            
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <a href="/chemedit.html" role="button" class="secondary outline" style="font-size: 13px;">Documentation</a>
+                <a href="/app.html" role="button" class="secondary outline" style="font-size: 13px;">Web ELN</a>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        &copy; 2026 Ruzal Sitdikov &bull; <a href="/about.html">About</a>
+    </footer>
 </body>
 </html>
