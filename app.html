@@ -6,14 +6,16 @@
     <title>ChemEdit Web ELN</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
     
-    <!-- Using jsdelivr to avoid Microsoft Edge tracking warnings -->
     <script src="https://cdn.jsdelivr.net/npm/smiles-drawer@2.1.8/dist/smiles-drawer.min.js"></script>
     <script type="text/javascript" src="https://jsme-editor.github.io/dist/jsme/jsme.nocache.js"></script>
     
     <style>
         body { background: #f4f7f8; }
-        nav { background: #167782; color: white; padding: 10px 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        nav { background: #167782; color: white; padding: 12px 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; }
         nav a { color: white; font-weight: bold; text-decoration: none; }
+        .nav-container { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .nav-right { display: flex; gap: 20px; align-items: center; }
+        
         .dashboard { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; max-width: 1400px; margin: 0 auto; padding: 0 20px; }
         @media (max-width: 900px) { .dashboard { grid-template-columns: 1fr; } }
         
@@ -36,13 +38,14 @@
 </head>
 <body>
     <nav>
-        <div style="max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-size: 1.2em;">🧪 ChemEdit ELN</span>
-            <span>
-                <a href="#" onclick="shareELN()" title="Copy Share Link">🔗 Share</a> &nbsp;|&nbsp; 
-                <a href="/about.html">About</a> &nbsp;|&nbsp; 
+        <div class="nav-container">
+            <span style="font-size: 1.2em; font-weight: 800;">🧪 ChemEdit ELN</span>
+            <div class="nav-right">
+                <a href="#" onclick="copyForObsidian()" title="Copy to Obsidian">📋 Copy for Obsidian</a>
+                <a href="#" onclick="shareELN()" title="Copy Share Link">🔗 Share</a>
+                <a href="/about.html">About</a>
                 <a href="https://github.com/ruzx/obsidian-chemedit" target="_blank">GitHub</a>
-            </span>
+            </div>
         </div>
     </nav>
 
@@ -83,10 +86,30 @@
 
         let elnData = { reactants: [], products: [] };
 
+        function copyForObsidian() {
+            if (elnData.reactants.length === 0 && elnData.products.length === 0) {
+                showStatus("Add compounds first!", "#d9534f"); return;
+            }
+            let yaml = "```eln\nstatus: Planned\nreactants:\n";
+            elnData.reactants.forEach(r => {
+                yaml += `  - smiles: "${r.smiles}"\n    name: "${r.name || ''}"\n    eq: ${r.eq || 1}\n`;
+                if (r.mass) yaml += `    mass: ${r.mass}\n`;
+                if (r.mmol && !r.mass) yaml += `    mmol: ${r.mmol}\n`;
+            });
+            yaml += "products:\n";
+            elnData.products.forEach(p => {
+                yaml += `  - smiles: "${p.smiles}"\n    name: "${p.name || ''}"\n    eq: ${p.eq || 1}\n`;
+                if (p.mass_isolated) yaml += `    mass_isolated: ${p.mass_isolated}\n`;
+            });
+            yaml += "```\n";
+            
+            navigator.clipboard.writeText(yaml);
+            showStatus("Copied Obsidian code block to clipboard!", "#28a745");
+        }
+
         function shareELN() {
             if (elnData.reactants.length === 0 && elnData.products.length === 0) {
-                showStatus("Add compounds to share!", "#d9534f");
-                return;
+                showStatus("Add compounds to share!", "#d9534f"); return;
             }
             try {
                 const jsonStr = JSON.stringify(elnData);
@@ -211,9 +234,8 @@
                     try {
                         const targetEl = document.getElementById(id);
                         if (!targetEl) return;
-                        // FIXED: Replaced SmiDrawer with SmilesDrawer
-                        const drawer = new SmilesDrawer.Drawer({ width: 80, height: 80, compactDrawing: false });
-                        SmilesDrawer.parse(smiles, tree => drawer.draw(tree, targetEl, 'light', false));
+                        const drawer = new SmiDrawer.Drawer({ width: 80, height: 80, compactDrawing: false });
+                        SmiDrawer.parse(smiles, tree => drawer.draw(tree, targetEl, 'light', false));
                     } catch(e) { console.error("Render error:", e); }
                 }, 50);
             };
