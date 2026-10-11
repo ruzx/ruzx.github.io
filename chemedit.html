@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ChemEdit Documentation</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+    <style>
+        body { background: #fbfbfb; }
+        
+        /* Navbar */
+        nav { background: #167782; color: white; padding: 0 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; position: sticky; top: 0; z-index: 100; }
+        nav ul li { color: white; }
+        nav ul li a { color: white; font-weight: bold; text-decoration: none; transition: opacity 0.2s; }
+        nav ul li a:hover { opacity: 0.8; }
+        
+        /* Docs Layout */
+        .docs-container { max-width: 1200px; margin: 0 auto; display: flex; gap: 40px; padding: 0 20px; align-items: flex-start; }
+        
+        /* Left Sidebar */
+        .sidebar { width: 250px; flex-shrink: 0; position: sticky; top: 80px; height: calc(100vh - 100px); overflow-y: auto; padding-right: 10px; border-right: 1px solid #ddd; }
+        .sidebar ul { list-style: none; padding: 0; margin: 0; }
+        .sidebar li { margin-bottom: 10px; }
+        .sidebar a { color: #555; text-decoration: none; font-size: 14px; font-weight: 500; display: block; padding: 5px 10px; border-radius: 6px; transition: background 0.2s; }
+        .sidebar a:hover { background: #eee; color: #167782; }
+        .sidebar .header { font-size: 11px; text-transform: uppercase; color: #999; font-weight: bold; margin: 20px 0 10px 0; letter-spacing: 0.5px; }
+        
+        /* Main Content */
+        .content { flex-grow: 1; padding-bottom: 100px; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid #ddd; margin-bottom: 40px; }
+        .content section { margin-bottom: 60px; scroll-margin-top: 100px; }
+        .content h2 { color: #167782; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; margin-bottom: 20px; }
+        .content h3 { margin-top: 30px; font-size: 1.3em; }
+        .content code { background: #f4f4f4; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; color: #d9534f; }
+        .content pre { background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 8px; overflow-x: auto; }
+        
+        /* Mobile responsiveness */
+        @media (max-width: 800px) {
+            .docs-container { flex-direction: column; }
+            .sidebar { width: 100%; position: static; height: auto; border-right: none; border-bottom: 1px solid #ddd; padding-bottom: 20px; margin-bottom: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="container-fluid">
+        <ul>
+            <li><strong style="font-size: 1.2em;">🧪 ChemEdit Docs</strong></li>
+        </ul>
+        <ul>
+            <li><a href="/app.html">Web ELN</a></li>
+            <li><a href="/about.html">About Developer</a></li>
+            <li><a href="https://github.com/ruzx/obsidian-chemedit" target="_blank">GitHub</a></li>
+        </ul>
+    </nav>
+
+    <div class="docs-container">
+        
+        <!-- SIDEBAR NAVIGATION -->
+        <aside class="sidebar">
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center; border: 1px solid #eee;">
+                <p style="font-size: 12px; margin: 0; color: #666;">Developed by</p>
+                <a href="/about.html" style="color: #167782; font-weight: bold; padding: 0; background: none;">Ruzal Sitdikov, Ph.D.</a>
+            </div>
+
+            <ul>
+                <div class="header">Getting Started</div>
+                <li><a href="#intro">Introduction & Install</a></li>
+                
+                <div class="header">Drawing & Rendering</div>
+                <li><a href="#draw">Drawing Molecules</a></li>
+                <li><a href="#inline">Inline Structures</a></li>
+                
+                <div class="header">Electronic Lab Notebook</div>
+                <li><a href="#eln">The ELN Block</a></li>
+                <li><a href="#stoichiometry">Stoichiometry Engine</a></li>
+                
+                <div class="header">LIMS & Dashboards</div>
+                <li><a href="#inventory">Inventory & Orders</a></li>
+                <li><a href="#pathways">Synthesis Pathways</a></li>
+                
+                <div class="header">Sharing</div>
+                <li><a href="#share">Web Sharing</a></li>
+            </ul>
+        </aside>
+
+        <!-- MAIN DOCUMENTATION CONTENT -->
+        <main class="content">
+            
+            <section id="intro">
+                <h2>Introduction</h2>
+                <p><strong>ChemEdit</strong> is a powerful Electronic Lab Notebook (ELN) and chemical drawing suite built directly into Obsidian. It allows synthetic chemists to draw molecules, calculate stoichiometry, track inventory, and map synthesis pathways completely offline.</p>
+                
+                <h3>Installation</h3>
+                <p>Currently, ChemEdit is installed manually or via BRAT while it awaits approval into the official Obsidian community store.</p>
+                <ol>
+                    <li>Download the latest release from <a href="https://github.com/ruzx/obsidian-chemedit/releases" target="_blank">GitHub</a>.</li>
+                    <li>Extract the folder into your vault's <code>.obsidian/plugins/</code> directory.</li>
+                    <li>Restart Obsidian and enable <strong>ChemEdit</strong> in Community Plugins.</li>
+                </ol>
+            </section>
+
+            <section id="draw">
+                <h2>Drawing Molecules</h2>
+                <p>ChemEdit uses an embedded version of <strong>Ketcher</strong>, meaning you can draw complex chemical structures natively inside Obsidian without relying on external websites.</p>
+                <ul>
+                    <li><strong>New Drawing:</strong> Click the Hexagon icon in the left ribbon to open the canvas.</li>
+                    <li><strong>Supported Formats:</strong> ChemEdit supports saving as SMILES, <code>.mol</code>, <code>.cdxml</code>, and <code>.ket</code>.</li>
+                    <li><strong>Editing:</strong> Simply double-click any rendered chemical structure in your note to re-open the editor.</li>
+                </ul>
+            </section>
+
+            <section id="inline">
+                <h2>Inline Structures</h2>
+                <p>You can render molecules directly inside sentences or Markdown tables. This is perfect for writing reaction procedures.</p>
+                <p>Simply use the prefix <code>$smiles=</code> followed by your SMILES string.</p>
+                <pre>The reaction was quenched to yield $smiles=CC(=O)OC1=CC=CC=C1C(=O)O as a white solid.</pre>
+            </section>
+
+            <section id="eln">
+                <h2>The ELN Block</h2>
+                <p>The core of ChemEdit is the interactive ELN block. You can insert a new experiment by opening the Command Palette (Ctrl+P) and selecting <strong>ChemEdit: Open ELN Dashboard</strong>, then clicking <strong>+ New Experiment</strong>.</p>
+                <p>This creates a special YAML code block that looks like this:</p>
+<pre>```eln
+status: Planned
+reactants:
+  - smiles: "CC1=CC(=O)CCC1"
+    eq: 1
+    mass: 150
+products:
+  - smiles: "CC1=CC(O)CCC1"
+```</pre>
+                <p>Obsidian will automatically render this block as a beautiful, interactive reaction scheme and stoichiometry table.</p>
+            </section>
+
+            <section id="stoichiometry">
+                <h2>Stoichiometry Engine</h2>
+                <p>When using the ELN block, ChemEdit acts as a live calculator:</p>
+                <ul>
+                    <li><strong>Auto-Molecular Weights:</strong> It calculates MWs instantly and offline.</li>
+                    <li><strong>Live Math:</strong> Double-click the table cells in Obsidian to type a mass. The mmols and product theoretical yields calculate instantly.</li>
+                    <li><strong>Yields:</strong> Enter your isolated mass in the Products table to calculate your percentage yield. It turns green if >80%, and red if <30%.</li>
+                </ul>
+            </section>
+
+            <section id="inventory">
+                <h2>Inventory, Orders & Dashboards</h2>
+                <p>ChemEdit turns Obsidian into a full LIMS (Laboratory Information Management System).</p>
+                <p>By adding specific tags to your notes (e.g., <code>tags: [inventory]</code> or <code>tags: [order]</code>), the plugin pulls them into a central database. Open the Dashboards from the Command Palette to see sortable, filterable tables of your entire lab's stock!</p>
+            </section>
+
+            <section id="pathways">
+                <h2>Synthesis Pathways</h2>
+                <p>ChemEdit can read the reactants and products across your entire vault and automatically stitch them together into an interactive mind-map.</p>
+                <p>Use the code block <code>```synthesis-map```</code> in a note to generate a flowchart of your current project's progress.</p>
+            </section>
+
+            <section id="share">
+                <h2>Web Sharing</h2>
+                <p>Need to show a reaction to a collaborator who doesn't use Obsidian? Click the <strong>🔗 Share</strong> button on any ELN block. It will generate a web link that you can send on Slack or Email. They can view the reaction and even edit the stoichiometry right in their browser!</p>
+                <p>👉 <a href="/app.html">Try the Web ELN here</a></p>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Smooth Scrolling Script -->
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
