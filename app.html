@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>ChemEdit Web ELN</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
-    <script src="https://unpkg.com/smiles-drawer@2.1.8/dist/smiles-drawer.min.js"></script>
+    
+    <!-- Using jsdelivr to avoid Microsoft Edge tracking warnings -->
+    <script src="https://cdn.jsdelivr.net/npm/smiles-drawer@2.1.8/dist/smiles-drawer.min.js"></script>
     <script type="text/javascript" src="https://jsme-editor.github.io/dist/jsme/jsme.nocache.js"></script>
     
     <style>
@@ -209,8 +211,9 @@
                     try {
                         const targetEl = document.getElementById(id);
                         if (!targetEl) return;
-                        const drawer = new SmiDrawer.Drawer({ width: 80, height: 80, compactDrawing: false });
-                        SmiDrawer.parse(smiles, tree => drawer.draw(tree, targetEl, 'light', false));
+                        // FIXED: Replaced SmiDrawer with SmilesDrawer
+                        const drawer = new SmilesDrawer.Drawer({ width: 80, height: 80, compactDrawing: false });
+                        SmilesDrawer.parse(smiles, tree => drawer.draw(tree, targetEl, 'light', false));
                     } catch(e) { console.error("Render error:", e); }
                 }, 50);
             };
