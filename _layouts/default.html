@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ page.title | default: site.title }}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+    <style>
+        body { display: flex; flex-direction: column; min-height: 100vh; margin: 0; background: #fbfbfb; }
+        .main-container { flex-grow: 1; display: flex; justify-content: center; padding: 40px 20px; }
+        .content-box { max-width: 650px; width: 100%; background: white; padding: 40px; border-radius: 8px; border: 1px solid #eee; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
+        .links a { display: inline-block; margin-right: 15px; margin-bottom: 10px; }
+        footer { text-align: center; padding: 20px; font-size: 12px; color: #888; border-top: 1px solid #ddd; background: #fbfbfb; }
+        footer a { color: #167782; text-decoration: none; }
+        /* Blog specific styles */
+        .post-date { color: #888; font-size: 0.9em; margin-bottom: 20px; display: block; }
+        .post-list { list-style: none; padding: 0; }
+        .post-list li { margin-bottom: 15px; border-bottom: 1px solid #f0f0f0; padding-bottom: 15px; }
+        .post-list h4 { margin-bottom: 5px; }
+        .post-list a { text-decoration: none; color: #167782; }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- This is where your individual pages/posts will be injected -->
+        <main class="content-box">
+            {{ content }}
+        </main>
+    </div>
+
+    <footer>
+        &copy; 2026 Ruzal Sitdikov &bull; <a href="/">Home</a> &bull; <a href="/about.html">About</a>
+    </footer>
+</body>
+</html>
