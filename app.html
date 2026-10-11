@@ -35,10 +35,11 @@
 <body>
     <nav>
         <div style="max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-size: 1.2em;">🧪 ChemEdit Web ELN</span>
+            <span style="font-size: 1.2em;">🧪 ChemEdit ELN</span>
             <span>
-                <a href="#" onclick="shareELN()" style="background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 4px; margin-right: 15px;">🔗 Share</a>
-                <a href="/about.html">About</a> | <a href="https://github.com/ruzx/obsidian-chemedit" target="_blank">Get Obsidian Plugin</a>
+                <a href="#" onclick="shareELN()" title="Copy Share Link">🔗 Share</a> &nbsp;|&nbsp; 
+                <a href="/about.html">About</a> &nbsp;|&nbsp; 
+                <a href="https://github.com/ruzx/obsidian-chemedit" target="_blank">GitHub</a>
             </span>
         </div>
     </nav>
@@ -80,18 +81,14 @@
 
         let elnData = { reactants: [], products: [] };
 
-        // --- SHARE LOGIC ---
         function shareELN() {
             if (elnData.reactants.length === 0 && elnData.products.length === 0) {
                 showStatus("Add compounds to share!", "#d9534f");
                 return;
             }
             try {
-                // Encode the JSON data safely into Base64
                 const jsonStr = JSON.stringify(elnData);
                 const b64 = btoa(unescape(encodeURIComponent(jsonStr)));
-                
-                // Build the URL pointing to the read-only viewer
                 const currentUrl = window.location.href.split('#')[0];
                 const viewerUrl = currentUrl.replace('app.html', 'elnviewer.html') + '#eln=' + b64;
                 
@@ -102,7 +99,6 @@
             }
         }
 
-        // --- LOAD LOGIC ---
         document.addEventListener("DOMContentLoaded", () => {
             const hash = window.location.hash;
             if (hash.startsWith('#eln=')) {
@@ -118,7 +114,6 @@
             }
         });
 
-        // --- ENGINE LOGIC ---
         async function addCompound(type) {
             if (!jsmeApplet) return;
             const smiles = jsmeApplet.smiles();
@@ -209,11 +204,14 @@
             rTbody.innerHTML = ''; pTbody.innerHTML = '';
 
             const drawStructure = (smiles, id) => {
+                if (!smiles) return;
                 setTimeout(() => {
                     try {
+                        const targetEl = document.getElementById(id);
+                        if (!targetEl) return;
                         const drawer = new SmiDrawer.Drawer({ width: 80, height: 80, compactDrawing: false });
-                        SmiDrawer.parse(smiles, tree => drawer.draw(tree, id, 'light', false));
-                    } catch(e) {}
+                        SmiDrawer.parse(smiles, tree => drawer.draw(tree, targetEl, 'light', false));
+                    } catch(e) { console.error("Render error:", e); }
                 }, 50);
             };
 
@@ -272,7 +270,6 @@
                 }
             });
             
-            // Update the URL hash silently so sharing always gets the latest data
             if(elnData.reactants.length > 0 || elnData.products.length > 0) {
                 history.replaceState(null, null, '#eln=' + btoa(unescape(encodeURIComponent(JSON.stringify(elnData)))));
             }
