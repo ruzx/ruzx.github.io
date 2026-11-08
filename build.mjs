@@ -1,13 +1,16 @@
 // Static site generator for ruzx.github.io — no dependencies.
-//   node build.mjs            → _site/   (GitHub Actions runs this on every push)
-//   node serve.mjs            → preview on http://localhost:8080
+//   node build.mjs   writes the pages (index.html, cv/, blog/, feed.xml …) straight into this folder,
+//                    so GitHub Pages "Deploy from a branch" serves them as they are. Commit the result.
+//   node serve.mjs   preview on http://localhost:8080
+// On GitHub Actions (optional workflow) it also assembles _site/ for actions/upload-pages-artifact.
 // Edit content/profile.json for the home page and CV, add Markdown files to content/posts/ for the blog.
 import { readFileSync, writeFileSync, mkdirSync, readdirSync, rmSync, cpSync, existsSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 
 const root = dirname(fileURLToPath(import.meta.url));
-const OUT = join(root, "_site");
+const OUT = root;
+const CI = !!process.env.GITHUB_ACTIONS;
 const SITE_URL = "https://ruzx.github.io";
 const P = JSON.parse(readFileSync(join(root, "content/profile.json"), "utf8"));
 
@@ -114,11 +117,9 @@ const pub = (p) => `<li>${authors(p.authors)} “${esc(p.title)}”. <em>${esc(p
 const appCard = (a) => `<a class="app" href="${esc(a.url)}"><img src="${esc(a.icon)}" alt="" width="52" height="52"><div><div class="app-name">${esc(a.name)}</div><div class="app-tag">${esc(a.tagline)}</div><p>${esc(a.text)}</p><span class="app-cta">Open in browser →</span></div></a>`;
 
 // ---------------------------------------------------------------- build
-rmSync(OUT, { recursive: true, force: true });
-mkdirSync(OUT, { recursive: true });
-cpSync(join(root, "assets"), join(OUT, "assets"), { recursive: true });
-for (const app of ["chemedit", "arcade"]) if (existsSync(join(root, app))) cpSync(join(root, app), join(OUT, app), { recursive: true });
-writeFileSync(join(OUT, ".nojekyll"), "");
+// only the generated folders are cleared — sources, apps and your other files stay untouched
+for (const d of ["cv", "blog"]) rmSync(join(OUT, d), { recursive: true, force: true });
+writeFileSync(join(OUT, ".nojekyll"), ""); // no Jekyll: serve the files exactly as built
 
 // posts
 const postDir = join(root, "content/posts");
@@ -195,4 +196,10 @@ write("sitemap.xml", `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${["/", "/cv/", "/blog/", "/chemedit/", "/arcade/", ...posts.map((p) => `/blog/${p.slug}/`)].map((u) => `<url><loc>${SITE_URL}${u}</loc></url>`).join("")}</urlset>`);
 write("404.html", page({ title: "Not found", path: "/404.html", body: `<h1>Page not found</h1><p><a href="/">Back to the home page</a></p>` }));
 
-console.log(`Built ${OUT}: home, CV, ${posts.length} post(s), apps: ${["chemedit", "arcade"].filter((a) => existsSync(join(root, a))).join(", ") || "none"}`);
+if (CI) {
+  const site = join(root, "_site");
+  rmSync(site, { recursive: true, force: true });
+  mkdirSync(site);
+  for (const e of readdirSync(root)) if (![".git", ".github", "node_modules", "_site"].includes(e)) cpSync(join(root, e), join(site, e), { recursive: true });
+}
+console.log(`Built: index.html, cv/, blog/ (${posts.length} post${posts.length === 1 ? "" : "s"}), feed.xml, sitemap.xml · apps: ${["chemedit", "arcade"].filter((a) => existsSync(join(root, a))).join(", ") || "none"}`);

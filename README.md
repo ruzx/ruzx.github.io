@@ -1,49 +1,51 @@
 # ruzx.github.io
 
-Personal site: profile, CV, blog, plus two installable web apps. No dependencies, only Node.
+Personal site of Ruzal Sitdikov: profile, CV, blog, plus two installable web apps. No dependencies, only Node.
 
 | URL | What | Source |
 |---|---|---|
 | `/` | Home: profile, apps, selected publications, latest posts | `content/profile.json` |
 | `/cv/` | Full CV (Print / PDF button) | `content/profile.json` |
 | `/blog/` | Blog + RSS (`/feed.xml`) | `content/posts/*.md` |
-| `/chemedit/` | ChemEdit: structure editor + ELN (PWA) | prebuilt, from the `chemeditnew` repo |
-| `/arcade/` | Molecule Arcade: chemistry puzzle games (PWA) | prebuilt, from the `chemeditnew` repo |
+| `/chemedit/` | ChemEdit: structure editor + ELN (PWA) | built from the `chemeditnew` repo |
+| `/arcade/` | Molecule Arcade: chemistry puzzle games (PWA) | built from the `chemeditnew` repo |
 
-## Publish (first time)
+## How it is published
 
-1. Move `DEPLOY-pages.yml` to `.github/workflows/pages.yml`. This is the deploy workflow; it couldn't be written into a `.github` folder directly.
-2. Copy everything in this folder into your `ruzx.github.io` repository and push to `main`:
-   ```bash
-   git clone https://github.com/ruzx/ruzx.github.io && cd ruzx.github.io
-   # copy the contents of chemeditnew/site/ here (including the hidden .github and .gitignore)
-   git add -A && git commit -m "Site: profile, CV, blog, ChemEdit, Molecule Arcade" && git push
-   ```
-3. On GitHub, open **Settings → Pages → Build and deployment → Source** and choose **GitHub Actions**.
-4. The *Deploy site* workflow builds and publishes on every push (watch it under the Actions tab). The site goes live at https://ruzx.github.io.
+`npm run build` writes the finished pages (`index.html`, `cv/`, `blog/`, `feed.xml`, `sitemap.xml`, `404.html`) straight into this folder. GitHub Pages serves them as they are.
 
-## Everyday editing
+- Settings → Pages → Source: **Deploy from a branch**, branch `main`, folder `/ (root)`.
+- No workflow is needed. The `.nojekyll` file makes GitHub skip Jekyll.
 
-- **CV / home page:** edit `content/profile.json`.
-  - Fields: summary, links, competencies, experience, education, publications, awards and apps.
-  - Set `"selected": true` on publications that should appear on the home page.
-  - To add a photo, put it at `assets/profile.jpg` and set `"photo": "/assets/profile.jpg"`.
-- **New blog post:** add `content/posts/YYYY-MM-DD-some-slug.md`:
+So after every change: **build → commit → push.**
+
+```bash
+npm run build      # regenerate the pages after editing content/
+npm run dev        # build + preview at http://localhost:8080
+npm run site       # rebuild ChemEdit + Molecule Arcade from chemeditnew, copy them here, rebuild pages
+```
+
+`npm run site` finds `chemeditnew` automatically: next to this folder, in `~/projectstest/` or in `~/Documents/GitHub/`. If it's somewhere else, run `set CHEMEDIT_DIR=C:\path\to\chemeditnew` first.
+
+## Editing
+
+- **CV / home page:** `content/profile.json`.
+  - It holds the summary, links, competencies, experience, education, publications, awards and apps.
+  - `"selected": true` puts a publication on the home page.
+  - Photo: save it as `assets/profile.jpg` and set `"photo": "/assets/profile.jpg"`.
+- **Blog post:** add `content/posts/YYYY-MM-DD-slug.md`, then run `npm run build`:
   ```markdown
   ---
   title: My post title
   date: 2026-12-01
   tags: [electrochemistry, teaching]
-  summary: One sentence shown in the list (optional).
-  draft: false
+  summary: One sentence for the list (optional).
   ---
-  Text in **Markdown**: headings, lists, links, images (put images in assets/), code, tables, quotes.
+  Text in **Markdown**: headings, lists, links, images (put them in assets/), code, tables, quotes.
   ```
-  You can do this directly on github.com ("Add file → Create new file"); the site rebuilds automatically.
-- **Preview locally:** `npm run dev` → http://localhost:8080.
-- **Update the apps:** in the `chemeditnew` repo, run `npm run site -- path/to/ruzx.github.io`. This rebuilds ChemEdit and Molecule Arcade, copies them into `chemedit/` and `arcade/`, and rebuilds the site. Then commit and push.
+- Other files in this repo (for example `app.html`, `elnviewer.html`) are left untouched and stay reachable at their URLs.
 
 ## Notes
 
 - Each app has its own service worker and cache. Installed apps update themselves after you push a new build.
-- The phone number and street address from the CV are deliberately left out of the public site. Add them in `profile.json` → `links` if you want them online.
+- The phone number and street address from the CV are deliberately not on the public site.
