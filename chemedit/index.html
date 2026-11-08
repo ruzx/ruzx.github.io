@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2f64d8">
+<meta name="description" content="ChemEdit: chemical structure editor and electronic lab notebook — offline, on your device.">
+<title>ChemEdit</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="ChemEdit">
+<style>html,body{margin:0;height:100%;background:#f6f7f9;font-family:system-ui,sans-serif}@media (prefers-color-scheme:dark){html,body{background:#15171b}}
+#boot{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;color:#69707d}</style>
+</head>
+<body>
+<div id="boot">Loading ChemEdit…</div>
+<script src="app.js"></script>
+<script>document.getElementById("boot")?.remove()</script>
+<noscript>ChemEdit needs JavaScript.</noscript>
+</body>
+</html>
