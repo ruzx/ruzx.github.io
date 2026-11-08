@@ -1,7 +1,7 @@
 {
   "name": "ChemEdit — structures & lab notebook",
   "short_name": "ChemEdit",
-  "description": "Draw chemical structures, keep an electronic lab notebook. Works offline; files stay on your device.",
+  "description": "A free educational tool: draw chemical structures, practise keeping a lab notebook. Works offline; files stay on your device.",
   "id": "./",
   "start_url": "./#/library",
   "scope": "./",

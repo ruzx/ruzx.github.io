@@ -3,99 +3,378 @@
   "title": "Synthetic chemist — electrocatalysis, sustainable catalysis & scale-up",
   "location": "Stockholm, Sweden",
   "photo": "",
-  "summary": "Ph.D. chemist with more than ten years of research in sustainable catalysis, electro-organic synthesis and reaction optimisation. I develop C–H functionalisation and late-stage functionalisation methods for complex molecules, map catalytic cycles to make reactions robust, and take lab-scale cascades towards scalable, greener processes. I also build small open software tools for chemists.",
+  "summary": "Ph.D. chemist with more than ten years of research in sustainable catalysis, electro-organic synthesis and reaction optimisation. I develop C–H functionalisation and late-stage functionalisation methods for complex molecules, map catalytic cycles to make reactions robust, and take lab-scale cascades towards scalable, greener processes. I also build small free software tools for teaching and learning chemistry.",
   "links": [
-    { "label": "Email", "url": "mailto:ruzal.sitdikov@ilk.uu.se", "text": "ruzal.sitdikov@ilk.uu.se" },
-    { "label": "LinkedIn", "url": "https://www.linkedin.com/in/ruzal", "text": "linkedin.com/in/ruzal" },
-    { "label": "Google Scholar", "url": "https://scholar.google.com/citations?user=3sHiXqAAAAAJ", "text": "Google Scholar" },
-    { "label": "GitHub", "url": "https://github.com/ruzx", "text": "github.com/ruzx" }
+    {
+      "label": "Email",
+      "url": "mailto:ruzal.sitdikov@ilk.uu.se",
+      "text": "ruzal.sitdikov@ilk.uu.se"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/ruzal",
+      "text": "linkedin.com/in/ruzal"
+    },
+    {
+      "label": "Google Scholar",
+      "url": "https://scholar.google.com/citations?user=3sHiXqAAAAAJ",
+      "text": "Google Scholar"
+    },
+    {
+      "label": "GitHub",
+      "url": "https://github.com/ruzx",
+      "text": "github.com/ruzx"
+    }
   ],
-  "interests": ["Electro-organic synthesis", "C–H functionalisation", "Late-stage functionalisation", "Isotope labelling", "Process scale-up", "Lab software"],
-
+  "interests": [
+    "Electro-organic synthesis",
+    "C–H functionalisation",
+    "Late-stage functionalisation",
+    "Isotope labelling",
+    "Process scale-up",
+    "Chemistry education"
+  ],
   "apps": [
     {
       "name": "ChemEdit",
       "url": "/chemedit/",
       "icon": "/chemedit/icons/icon.svg",
-      "tagline": "Structure editor & electronic lab notebook",
-      "text": "Draw structures and double-click to edit them again. Files are saved straight to a folder on your computer (SVG, Molfile, SDF, CDXML…). Keep experiments with stoichiometry, reaction schemes and a lab book. Works offline; nothing leaves your device."
+      "tagline": "Structure editor & lab notebook for teaching",
+      "text": "A free educational tool for students and teachers: draw structures and double-click to edit them again, save them as ordinary files (SVG, Molfile, SDF, CDXML…), and practise keeping a lab notebook with stoichiometry, reaction schemes and a lab book. Works offline; nothing leaves your device."
     },
     {
-      "name": "Molecule Arcade",
-      "url": "/arcade/",
-      "icon": "/arcade/icons/icon.svg",
-      "tagline": "Puzzle games for organic chemistry",
-      "text": "Four short games for students and teachers: link transformations, forge multistep routes, draw mystery molecules from clues, and play functional-group bingo. Works offline."
+      "name": "ChemGame",
+      "url": "/chemgame/",
+      "icon": "/chemgame/icons/icon.svg",
+      "tagline": "Organic chemistry learning games",
+      "text": "Four short learning games for organic chemistry courses: link transformations, put synthetic routes in order, draw mystery molecules from clues, and play functional-group bingo. Free, offline, no sign-up."
     }
   ],
-
   "competencies": [
-    { "area": "Chemistry", "items": "Organic electrosynthesis & electrocatalysis (anodic/cathodic, paired), sustainable/green chemistry, photocatalysis, metal catalysis, cross-coupling (XEC, HAT), C–H activation, late-stage functionalisation, catalytic cascades, redox chemistry, isotope labelling (D, ¹³CD₃), click and supramolecular chemistry, mechanistic studies" },
-    { "area": "Process & scale-up", "items": "Reaction scale-up to preparative scale, high-throughput screening and Bayesian optimisation, flow and electro reactors, process miniaturisation, data-driven optimisation workflows" },
-    { "area": "Analytical", "items": "NMR (1D/2D), MS (GC/LC-MS, ESI, HRMS, MALDI-TOF), GC, HPLC, UV-Vis, fluorescence, IR, cyclic voltammetry, potentiometry, synchrotron X-ray techniques, XRD, DLS, rheometry, thermal analysis" },
-    { "area": "Technical", "items": "Glovebox and Schlenk techniques; microwave, photo-, electro-, flow and high-pressure reactors; crystal growth; chromatography systems; instrument maintenance and troubleshooting" },
-    { "area": "Software", "items": "ChemDraw, SciFinder/Reaxys, MestReNova/TopSpin, Mercury, Origin, LaTeX, Zotero/EndNote, Python automation, TypeScript; scientific illustration (Inkscape, Blender)" },
-    { "area": "Languages", "items": "English (fluent), Swedish (professional working proficiency, B1/B2), Russian and Tatar (native)" }
+    {
+      "area": "Chemistry",
+      "items": "Organic electrosynthesis & electrocatalysis (anodic/cathodic, paired), sustainable/green chemistry, photocatalysis, metal catalysis, cross-coupling (XEC, HAT), C–H activation, late-stage functionalisation, catalytic cascades, redox chemistry, isotope labelling (D, ¹³CD₃), click and supramolecular chemistry, mechanistic studies"
+    },
+    {
+      "area": "Process & scale-up",
+      "items": "Reaction scale-up to preparative scale, high-throughput screening and Bayesian optimisation, flow and electro reactors, process miniaturisation, data-driven optimisation workflows"
+    },
+    {
+      "area": "Analytical",
+      "items": "NMR (1D/2D), MS (GC/LC-MS, ESI, HRMS, MALDI-TOF), GC, HPLC, UV-Vis, fluorescence, IR, cyclic voltammetry, potentiometry, synchrotron X-ray techniques, XRD, DLS, rheometry, thermal analysis"
+    },
+    {
+      "area": "Technical",
+      "items": "Glovebox and Schlenk techniques; microwave, photo-, electro-, flow and high-pressure reactors; crystal growth; chromatography systems; instrument maintenance and troubleshooting"
+    },
+    {
+      "area": "Software",
+      "items": "ChemDraw, SciFinder/Reaxys, MestReNova/TopSpin, Mercury, Origin, LaTeX, Zotero/EndNote, automation; scientific illustration (Inkscape, Blender)"
+    },
+    {
+      "area": "Languages",
+      "items": "English (fluent), Swedish (professional working proficiency, B1/B2), Russian and Tatar (native)"
+    }
   ],
-
   "experience": [
-    { "role": "Postdoctoral Researcher", "org": "KTH Royal Institute of Technology", "place": "Stockholm, Sweden", "dates": "Jan 2026 – present",
-      "points": ["Developing sustainable, atom-efficient catalytic cascades for complex small molecules.", "Mapping catalytic cycles to make reactions more robust and predictable.", "Synchrotron X-ray characterisation for structural and mechanistic insight.", "Optimising reaction conditions for scale-up with integrated data-driven workflows."] },
-    { "role": "Research Scientist, Lead Identification Unit", "org": "SciLifeLab / Uppsala University", "place": "Uppsala, Sweden", "dates": "Aug 2025 – Jan 2026",
-      "points": ["Synthesised novel small-molecule hits within multidisciplinary drug-discovery teams.", "Rapid validation of synthetic intermediates by LC-MS and NMR.", "Translated biological targets into efficient synthetic routes."] },
-    { "role": "Research Scientist (O. Verho & A. Karlén groups)", "org": "Uppsala University", "place": "Uppsala, Sweden", "dates": "Aug 2023 – Nov 2025",
-      "points": ["Led the development of metalla-electrocatalytic C–H functionalisation for bioactive molecules and biomass valorisation.", "Late-stage functionalisation directly on complex bioactive molecules; scale-up to preparative scale.", "Sustainable C–H functionalisation protocols that minimise toxic metal use.", "Set up and managed the electrochemistry laboratory; mentoring."] },
-    { "role": "Researcher (M. Cuartero & G. Crespo group)", "org": "KTH Royal Institute of Technology", "place": "Stockholm, Sweden", "dates": "Nov 2021 – Jul 2023",
-      "points": ["Designed and synthesised tunable redox-active mediators (ferrocene monolayers, Ru/Os complexes) for ion-to-electron transduction and sensing.", "Trained 50+ students in GC-MS analytical chromatography."] },
-    { "role": "Postdoctoral Fellow (M. Rueping group)", "org": "KAUST Catalysis Center", "place": "Thuwal, Saudi Arabia", "dates": "Nov 2018 – Oct 2021",
-      "points": ["Ni-catalysed electrochemical protocols for heterocycle synthesis and direct deuteration.", "Electrochemical late-stage ¹³CD₃-methylation of drugs; isotope labelling supporting DMPK studies.", "Maintained automated reactors and LC-MS; supervised interns."] },
-    { "role": "Postdoctoral Researcher (R. Leino group, Johan Gadolin scholar)", "org": "Åbo Akademi University", "place": "Turku, Finland", "dates": "Aug 2017 – Sep 2018",
-      "points": ["Enantioselective tin-mediated Barbier-type propargylation of unprotected carbohydrates.", "“Clickable” mannitol-based supramolecular organogelators; nanoparticle modification and rheology."] },
-    { "role": "Postdoctoral Researcher (O. Ramström group, Visby scholar)", "org": "KTH Royal Institute of Technology", "place": "Stockholm, Sweden", "dates": "Jul 2016 – Jul 2017",
-      "points": ["Multivalent glycodendrimer metal-cluster inhibitors against multiresistant E. coli.", "Trehalose-based dendrons for carbon- and quantum-dot functionalisation."] },
-    { "role": "Visiting Researcher (W. Dehaen group, Erasmus Mundus)", "org": "KU Leuven", "place": "Leuven, Belgium", "dates": "Sep 2015 – May 2016",
-      "points": ["New (thia)pillar[n]arene macrocycles for sensing and catalysis, structures proven by X-ray.", "UV and NMR titrations of ligand binding; supervised a Master's project."] },
-    { "role": "Junior Researcher / Project Engineer (I. S. Antipin & I. I. Stoikov)", "org": "Kazan Federal University", "place": "Kazan, Russia", "dates": "Dec 2011 – Jul 2015",
-      "points": ["Multivalent (thia)calix[n]arenes and Si nanoparticles for biosensors and nanomaterials.", "Supramolecular receptors for anions, cations and dicarboxylic acids; binding constants by UV-vis and fluorescence.", "Laboratory safety, training and supervision of undergraduate projects; grant writing."] },
-    { "role": "Visiting Research Student (A. Casnati group)", "org": "Università degli Studi di Parma", "place": "Parma, Italy", "dates": "Sep 2009 – Dec 2009",
-      "points": ["Galactose-modified multivalent calixarenes for the study of carbohydrate-binding proteins."] }
+    {
+      "role": "Postdoctoral Researcher",
+      "org": "KTH Royal Institute of Technology",
+      "place": "Stockholm, Sweden",
+      "dates": "Jan 2026 – present",
+      "points": [
+        "Developing sustainable, atom-efficient catalytic cascades for complex small molecules.",
+        "Mapping catalytic cycles to make reactions more robust and predictable.",
+        "Synchrotron X-ray characterisation for structural and mechanistic insight.",
+        "Optimising reaction conditions for scale-up with integrated data-driven workflows."
+      ]
+    },
+    {
+      "role": "Research Scientist, Lead Identification Unit",
+      "org": "SciLifeLab / Uppsala University",
+      "place": "Uppsala, Sweden",
+      "dates": "Aug 2025 – Jan 2026",
+      "points": [
+        "Synthesised novel small-molecule hits within multidisciplinary drug-discovery teams.",
+        "Rapid validation of synthetic intermediates by LC-MS and NMR.",
+        "Translated biological targets into efficient synthetic routes."
+      ]
+    },
+    {
+      "role": "Research Scientist (O. Verho & A. Karlén groups)",
+      "org": "Uppsala University",
+      "place": "Uppsala, Sweden",
+      "dates": "Aug 2023 – Nov 2025",
+      "points": [
+        "Led the development of metalla-electrocatalytic C–H functionalisation for bioactive molecules and biomass valorisation.",
+        "Late-stage functionalisation directly on complex bioactive molecules; scale-up to preparative scale.",
+        "Sustainable C–H functionalisation protocols that minimise toxic metal use.",
+        "Set up and managed the electrochemistry laboratory; mentoring."
+      ]
+    },
+    {
+      "role": "Researcher (M. Cuartero & G. Crespo group)",
+      "org": "KTH Royal Institute of Technology",
+      "place": "Stockholm, Sweden",
+      "dates": "Nov 2021 – Jul 2023",
+      "points": [
+        "Designed and synthesised tunable redox-active mediators (ferrocene monolayers, Ru/Os complexes) for ion-to-electron transduction and sensing.",
+        "Trained 50+ students in GC-MS analytical chromatography."
+      ]
+    },
+    {
+      "role": "Postdoctoral Fellow (M. Rueping group)",
+      "org": "KAUST Catalysis Center",
+      "place": "Thuwal, Saudi Arabia",
+      "dates": "Nov 2018 – Oct 2021",
+      "points": [
+        "Ni-catalysed electrochemical protocols for heterocycle synthesis and direct deuteration.",
+        "Electrochemical late-stage ¹³CD₃-methylation of drugs; isotope labelling supporting DMPK studies.",
+        "Maintained automated reactors and LC-MS; supervised interns."
+      ]
+    },
+    {
+      "role": "Postdoctoral Researcher (R. Leino group, Johan Gadolin scholar)",
+      "org": "Åbo Akademi University",
+      "place": "Turku, Finland",
+      "dates": "Aug 2017 – Sep 2018",
+      "points": [
+        "Enantioselective tin-mediated Barbier-type propargylation of unprotected carbohydrates.",
+        "“Clickable” mannitol-based supramolecular organogelators; nanoparticle modification and rheology."
+      ]
+    },
+    {
+      "role": "Postdoctoral Researcher (O. Ramström group, Visby scholar)",
+      "org": "KTH Royal Institute of Technology",
+      "place": "Stockholm, Sweden",
+      "dates": "Jul 2016 – Jul 2017",
+      "points": [
+        "Multivalent glycodendrimer metal-cluster inhibitors against multiresistant E. coli.",
+        "Trehalose-based dendrons for carbon- and quantum-dot functionalisation."
+      ]
+    },
+    {
+      "role": "Visiting Researcher (W. Dehaen group, Erasmus Mundus)",
+      "org": "KU Leuven",
+      "place": "Leuven, Belgium",
+      "dates": "Sep 2015 – May 2016",
+      "points": [
+        "New (thia)pillar[n]arene macrocycles for sensing and catalysis, structures proven by X-ray.",
+        "UV and NMR titrations of ligand binding; supervised a Master's project."
+      ]
+    },
+    {
+      "role": "Junior Researcher / Project Engineer (I. S. Antipin & I. I. Stoikov)",
+      "org": "Kazan Federal University",
+      "place": "Kazan, Russia",
+      "dates": "Dec 2011 – Jul 2015",
+      "points": [
+        "Multivalent (thia)calix[n]arenes and Si nanoparticles for biosensors and nanomaterials.",
+        "Supramolecular receptors for anions, cations and dicarboxylic acids; binding constants by UV-vis and fluorescence.",
+        "Laboratory safety, training and supervision of undergraduate projects; grant writing."
+      ]
+    },
+    {
+      "role": "Visiting Research Student (A. Casnati group)",
+      "org": "Università degli Studi di Parma",
+      "place": "Parma, Italy",
+      "dates": "Sep 2009 – Dec 2009",
+      "points": [
+        "Galactose-modified multivalent calixarenes for the study of carbohydrate-binding proteins."
+      ]
+    }
   ],
-
   "education": [
-    { "degree": "Ph.D., Organic (Supramolecular) Chemistry", "org": "Kazan Federal University", "place": "Kazan, Russia", "dates": "2015",
-      "points": ["Regional award “Best PhD student in natural sciences in Tatarstan”; Rector's certificate of honour; RFBR research grant."] }
+    {
+      "degree": "Ph.D., Organic (Supramolecular) Chemistry",
+      "org": "Kazan Federal University",
+      "place": "Kazan, Russia",
+      "dates": "2015",
+      "points": [
+        "Regional award “Best PhD student in natural sciences in Tatarstan”; Rector's certificate of honour; RFBR research grant."
+      ]
+    }
   ],
-
   "publications": [
-    { "authors": "Sitdikov R., Nikolaienko P., Meyer L., Verho O.", "title": "Cobaltaelectro-catalyzed C–H acyloxylation of aromatic and vinylic amide derivatives at room temperature", "venue": "Chem. Commun.", "year": 2025, "doi": "10.1039/D5CC04394H", "selected": true },
-    { "authors": "Ponra S., Sitdikov R., Calis A., Verho O.", "title": "An electrochemical amidation/C–H halogenation cascade for the sustainable synthesis of halogenated N-aryl amides, carbamates and ureas", "venue": "ChemRxiv (accepted, Angew. Chem.)", "year": 2025, "doi": "10.26434/chemrxiv-2025-pjgx8", "selected": true },
-    { "authors": "Fan Z., Zamudio E., Liu Y., Laborda E., Sitdikov R., Tillo A., Crespo G. A., Cuartero M.", "title": "Adamantane Os(II) dissolved redox probe as an efficient ion-to-electron transducer for voltammetric ionophore-based sensing", "venue": "Sens. Actuators B Chem.", "year": 2025, "doi": "10.1016/j.snb.2025.138359" },
-    { "authors": "Sitdikov R. R., Steverlynck J., Nikolaenko P., Kale A., Rueping M.", "title": "Trideuteromethylation of alkyl and aryl bromides by nickel-catalyzed electrochemical reductive cross-electrophile coupling", "venue": "Synlett", "year": 2024, "doi": "10.1055/s-0042-1751558", "selected": true },
-    { "authors": "Li N., Sitdikov R., Kale A. P., Steverlynck J., Li B., Rueping M.", "title": "A review of recent advances in electrochemical and photoelectrochemical late-stage functionalization classified by anodic oxidation, cathodic reduction, and paired electrolysis", "venue": "Beilstein J. Org. Chem. 20, 2500–2566", "year": 2024, "doi": "10.3762/bjoc.20.214" },
-    { "authors": "Losus R. M., Sitdikov R., Stoikov I., Dobrzańska L.", "title": "Structural diversity of anthraquinone substituted p-tert-butylthiacalix[4]arene in the partial cone conformation upon external stimuli", "venue": "CrystEngComm 26, 3929–3936", "year": 2024, "doi": "10.1039/D4CE00387J" },
-    { "authors": "Mattsson I., Lahtinen M., Sitdikov R. R., Wank B., Saloranta-Simell T., Leino R.", "title": "Phase-selective low molecular weight organogelators derived from allylated d-mannose", "venue": "Carbohydr. Res. 518, 108596", "year": 2022, "doi": "10.1016/j.carres.2022.108596" },
-    { "authors": "Steverlynck J., Sitdikov R. R., Rueping M.", "title": "The deuterated “magic methyl” group: a guide to site-selective trideuteromethyl incorporation and labeling using CD₃-reagents", "venue": "Chem. Eur. J.", "year": 2021, "doi": "10.1002/chem.202101179" },
-    { "authors": "Mattsson I., Sitdikov R. R., Gunell A. C. M., Lahtinen M., Saloranta-Simell T., Leino R.", "title": "Improved synthesis and application of conjugation-amenable polyols from d-mannose", "venue": "RSC Adv. 10, 3960–3966", "year": 2020, "doi": "10.1039/C9RA10378C" },
-    { "authors": "Burilov V. A., Ibragimova R. R., Nugmanov R. I., Sitdikov R. R., Islamov D. R., Kataeva O., Solovyova S. E., Antipin I. S.", "title": "Effect of copper(I) on the conformation of the thiacalixarene platform in azide–alkyne cycloaddition", "venue": "Russ. Chem. Bull., 2114–2124", "year": 2016, "doi": "10.1007/s11172-015-1126-9" },
-    { "authors": "Evtugyn G. A., Porfireva A. V., Stepanova V., Sitdikov R., Stoikov I. I., Nikolelis D., Hianik T.", "title": "Electrochemical aptasensor based on polycarboxylic macrocycle modified with Neutral Red for aflatoxin B1 detection", "venue": "Electroanalysis, 2100–2109", "year": 2014, "doi": "10.1002/elan.201400328" },
-    { "authors": "Stoikov I. I., Sitdikov R. R., Mostovaya O. A.", "title": "Aminoanthraquinone derivatives based on p-tert-butylthiacalix[4]arene: synthesis and fluorescence properties", "venue": "Russ. J. Org. Chem., 581–588", "year": 2014, "doi": "10.1134/S107042801404023X" },
-    { "authors": "Ziganshin M. A., Gorbatchuk V. V., Sitdikov R. R., Stoikov I. I., Antipin I. S.", "title": "Molecular recognition of organic compounds by the data on polymorphic and pseudo-polymorphic transformations of tert-butylthiacalix[4]arene derivative", "venue": "Russ. Chem. Bull., 201–206", "year": 2014, "doi": "10.1007/s11172-014-0414-0" },
-    { "authors": "Stoikov I. I., Vavilova A. A., Badaeva R. D., Gorbachuk V. V., Evtugyn V. G., Sitdikov R., Yakimova L. S., Zharov I.", "title": "Synthesis of hybrid nano- and microsized particles on the base of colloid silica and thiacalix[4]arene derivatives", "venue": "J. Nanopart. Res., 1617", "year": 2013, "doi": "10.1007/s11051-013-1617-2" },
-    { "authors": "Evtugyn G. A., Porfireva A. V., Sitdikov R., Evtugyn V. G., Stoikov I. I., Antipin I. S., Hianik T.", "title": "Electrochemical aptasensor for the determination of ochratoxin A at the Au electrode modified with Ag nanoparticles decorated with macrocyclic ligand", "venue": "Electroanalysis, 1847–1854", "year": 2013, "doi": "10.1002/elan.201300164" },
-    { "authors": "Evtugyn G. A., Kostyleva V. B., Porfireva A. V., Savelieva M. A., Evtugyn V. G., Sitdikov R. R., Stoikov I. I., Antipin I. S., Hianik T.", "title": "Label-free aptasensor for thrombin determination based on the nanostructured phenazine mediator", "venue": "Talanta, 156–163", "year": 2012, "doi": "10.1016/j.talanta.2012.07.007" },
-    { "authors": "Evtugyn G. A., Younusov R. R., Ivanov A. N., Sitdikov R., Galuchin A. V., Budnikov H. C., Stoikov I. I., Antipin I. S.", "title": "Cholinesterase biosensors based on screen-printed electrodes modified with Co-phthalocyanine and polycarboxylated thiacalixarenes", "venue": "Electroanalysis, 554–562", "year": 2012, "doi": "10.1002/elan.201100538" },
-    { "authors": "Evtugyn G. A., Kostyleva V., Sitdikov R., Porfireva A. V., Savelieva M., Stoikov I. I., Antipin I. S.", "title": "Aptasensor based on a macrocyclic ligand bearing Neutral Red", "venue": "Electroanalysis, 91–100", "year": 2012, "doi": "10.1002/elan.201100435" },
-    { "authors": "Evtugyn G. A., Shamagsumova R. V., Sitdikov R. R., Stoikov I. I., Antipin I. S.", "title": "Dopamine sensor based on a composite of silver nanoparticles implemented in the electroactive matrix of calixarenes", "venue": "Electroanalysis, 2281–2289", "year": 2011, "doi": "10.1002/elan.201100197" },
-    { "authors": "Evtugyn G. A., Shamagsumova R. V., Stoikova E. E., Sitdikov R. R., Stoikov I. I., Budnikov H. C.", "title": "Potentiometric sensors based on polyaniline and thiacalixarenes for green tea discrimination", "venue": "Electroanalysis, 1081–1088", "year": 2011, "doi": "10.1002/elan.201000586" },
-    { "authors": "Stoikov I. I., Zhukov A. Y., Agafonova M. N., Sitdikov R. R., Antipin I. S., Konovalov A. I.", "title": "p-tert-Butylthiacalix[4]arenes functionalized at the lower rim by o-, m-, p-amido and (amidomethyl)pyridine fragments as receptors for α-hydroxy- and dicarboxylic acids", "venue": "Tetrahedron 66, 359–367", "year": 2010, "doi": "10.1016/j.tet.2009.10.075" }
+    {
+      "authors": "Sitdikov R., Nikolaienko P., Meyer L., Verho O.",
+      "title": "Cobaltaelectro-catalyzed C–H acyloxylation of aromatic and vinylic amide derivatives at room temperature",
+      "venue": "Chem. Commun.",
+      "year": 2025,
+      "doi": "10.1039/D5CC04394H",
+      "selected": true
+    },
+    {
+      "authors": "Fan Z., Zamudio E., Liu Y., Laborda E., Sitdikov R., Tillo A., Crespo G. A., Cuartero M.",
+      "title": "Adamantane Os(II) dissolved redox probe as an efficient ion-to-electron transducer for voltammetric ionophore-based sensing",
+      "venue": "Sens. Actuators B Chem.",
+      "year": 2025,
+      "doi": "10.1016/j.snb.2025.138359"
+    },
+    {
+      "authors": "Sitdikov R. R., Steverlynck J., Nikolaenko P., Kale A., Rueping M.",
+      "title": "Trideuteromethylation of alkyl and aryl bromides by nickel-catalyzed electrochemical reductive cross-electrophile coupling",
+      "venue": "Synlett",
+      "year": 2024,
+      "doi": "10.1055/s-0042-1751558",
+      "selected": true
+    },
+    {
+      "authors": "Li N., Sitdikov R., Kale A. P., Steverlynck J., Li B., Rueping M.",
+      "title": "A review of recent advances in electrochemical and photoelectrochemical late-stage functionalization classified by anodic oxidation, cathodic reduction, and paired electrolysis",
+      "venue": "Beilstein J. Org. Chem. 20, 2500–2566",
+      "year": 2024,
+      "doi": "10.3762/bjoc.20.214"
+    },
+    {
+      "authors": "Losus R. M., Sitdikov R., Stoikov I., Dobrzańska L.",
+      "title": "Structural diversity of anthraquinone substituted p-tert-butylthiacalix[4]arene in the partial cone conformation upon external stimuli",
+      "venue": "CrystEngComm 26, 3929–3936",
+      "year": 2024,
+      "doi": "10.1039/D4CE00387J"
+    },
+    {
+      "authors": "Mattsson I., Lahtinen M., Sitdikov R. R., Wank B., Saloranta-Simell T., Leino R.",
+      "title": "Phase-selective low molecular weight organogelators derived from allylated d-mannose",
+      "venue": "Carbohydr. Res. 518, 108596",
+      "year": 2022,
+      "doi": "10.1016/j.carres.2022.108596"
+    },
+    {
+      "authors": "Steverlynck J., Sitdikov R. R., Rueping M.",
+      "title": "The deuterated “magic methyl” group: a guide to site-selective trideuteromethyl incorporation and labeling using CD₃-reagents",
+      "venue": "Chem. Eur. J.",
+      "year": 2021,
+      "doi": "10.1002/chem.202101179"
+    },
+    {
+      "authors": "Mattsson I., Sitdikov R. R., Gunell A. C. M., Lahtinen M., Saloranta-Simell T., Leino R.",
+      "title": "Improved synthesis and application of conjugation-amenable polyols from d-mannose",
+      "venue": "RSC Adv. 10, 3960–3966",
+      "year": 2020,
+      "doi": "10.1039/C9RA10378C"
+    },
+    {
+      "authors": "Burilov V. A., Ibragimova R. R., Nugmanov R. I., Sitdikov R. R., Islamov D. R., Kataeva O., Solovyova S. E., Antipin I. S.",
+      "title": "Effect of copper(I) on the conformation of the thiacalixarene platform in azide–alkyne cycloaddition",
+      "venue": "Russ. Chem. Bull., 2114–2124",
+      "year": 2016,
+      "doi": "10.1007/s11172-015-1126-9"
+    },
+    {
+      "authors": "Evtugyn G. A., Porfireva A. V., Stepanova V., Sitdikov R., Stoikov I. I., Nikolelis D., Hianik T.",
+      "title": "Electrochemical aptasensor based on polycarboxylic macrocycle modified with Neutral Red for aflatoxin B1 detection",
+      "venue": "Electroanalysis, 2100–2109",
+      "year": 2014,
+      "doi": "10.1002/elan.201400328"
+    },
+    {
+      "authors": "Stoikov I. I., Sitdikov R. R., Mostovaya O. A.",
+      "title": "Aminoanthraquinone derivatives based on p-tert-butylthiacalix[4]arene: synthesis and fluorescence properties",
+      "venue": "Russ. J. Org. Chem., 581–588",
+      "year": 2014,
+      "doi": "10.1134/S107042801404023X"
+    },
+    {
+      "authors": "Ziganshin M. A., Gorbatchuk V. V., Sitdikov R. R., Stoikov I. I., Antipin I. S.",
+      "title": "Molecular recognition of organic compounds by the data on polymorphic and pseudo-polymorphic transformations of tert-butylthiacalix[4]arene derivative",
+      "venue": "Russ. Chem. Bull., 201–206",
+      "year": 2014,
+      "doi": "10.1007/s11172-014-0414-0"
+    },
+    {
+      "authors": "Stoikov I. I., Vavilova A. A., Badaeva R. D., Gorbachuk V. V., Evtugyn V. G., Sitdikov R., Yakimova L. S., Zharov I.",
+      "title": "Synthesis of hybrid nano- and microsized particles on the base of colloid silica and thiacalix[4]arene derivatives",
+      "venue": "J. Nanopart. Res., 1617",
+      "year": 2013,
+      "doi": "10.1007/s11051-013-1617-2"
+    },
+    {
+      "authors": "Evtugyn G. A., Porfireva A. V., Sitdikov R., Evtugyn V. G., Stoikov I. I., Antipin I. S., Hianik T.",
+      "title": "Electrochemical aptasensor for the determination of ochratoxin A at the Au electrode modified with Ag nanoparticles decorated with macrocyclic ligand",
+      "venue": "Electroanalysis, 1847–1854",
+      "year": 2013,
+      "doi": "10.1002/elan.201300164"
+    },
+    {
+      "authors": "Evtugyn G. A., Kostyleva V. B., Porfireva A. V., Savelieva M. A., Evtugyn V. G., Sitdikov R. R., Stoikov I. I., Antipin I. S., Hianik T.",
+      "title": "Label-free aptasensor for thrombin determination based on the nanostructured phenazine mediator",
+      "venue": "Talanta, 156–163",
+      "year": 2012,
+      "doi": "10.1016/j.talanta.2012.07.007"
+    },
+    {
+      "authors": "Evtugyn G. A., Younusov R. R., Ivanov A. N., Sitdikov R., Galuchin A. V., Budnikov H. C., Stoikov I. I., Antipin I. S.",
+      "title": "Cholinesterase biosensors based on screen-printed electrodes modified with Co-phthalocyanine and polycarboxylated thiacalixarenes",
+      "venue": "Electroanalysis, 554–562",
+      "year": 2012,
+      "doi": "10.1002/elan.201100538"
+    },
+    {
+      "authors": "Evtugyn G. A., Kostyleva V., Sitdikov R., Porfireva A. V., Savelieva M., Stoikov I. I., Antipin I. S.",
+      "title": "Aptasensor based on a macrocyclic ligand bearing Neutral Red",
+      "venue": "Electroanalysis, 91–100",
+      "year": 2012,
+      "doi": "10.1002/elan.201100435"
+    },
+    {
+      "authors": "Evtugyn G. A., Shamagsumova R. V., Sitdikov R. R., Stoikov I. I., Antipin I. S.",
+      "title": "Dopamine sensor based on a composite of silver nanoparticles implemented in the electroactive matrix of calixarenes",
+      "venue": "Electroanalysis, 2281–2289",
+      "year": 2011,
+      "doi": "10.1002/elan.201100197"
+    },
+    {
+      "authors": "Evtugyn G. A., Shamagsumova R. V., Stoikova E. E., Sitdikov R. R., Stoikov I. I., Budnikov H. C.",
+      "title": "Potentiometric sensors based on polyaniline and thiacalixarenes for green tea discrimination",
+      "venue": "Electroanalysis, 1081–1088",
+      "year": 2011,
+      "doi": "10.1002/elan.201000586"
+    },
+    {
+      "authors": "Stoikov I. I., Zhukov A. Y., Agafonova M. N., Sitdikov R. R., Antipin I. S., Konovalov A. I.",
+      "title": "p-tert-Butylthiacalix[4]arenes functionalized at the lower rim by o-, m-, p-amido and (amidomethyl)pyridine fragments as receptors for α-hydroxy- and dicarboxylic acids",
+      "venue": "Tetrahedron 66, 359–367",
+      "year": 2010,
+      "doi": "10.1016/j.tet.2009.10.075"
+    }
   ],
-
   "awards": [
-    { "name": "Johan Gadolin Scholarship", "detail": "Programme for international talented researchers, Åbo Akademi", "place": "Finland", "year": "2017" },
-    { "name": "Visby Scholarship", "detail": "Merit-based scholarship for academic excellence and leadership", "place": "Sweden", "year": "2016" },
-    { "name": "Erasmus Mundus Aurora 2", "detail": "International research mobility programme", "place": "European Union", "year": "2015" },
-    { "name": "Rector's Certificate of Honour", "detail": "Ten best young researchers, Kazan Federal University", "place": "Russia", "year": "2015" },
-    { "name": "RFBR research grant 14-03-31389", "detail": "Two-year young-scientist grant", "place": "Russia", "year": "2014" },
-    { "name": "Best PhD student in natural sciences in Tatarstan", "detail": "1st place", "place": "Russia", "year": "2013" }
+    {
+      "name": "Johan Gadolin Scholarship",
+      "detail": "Programme for international talented researchers, Åbo Akademi",
+      "place": "Finland",
+      "year": "2017"
+    },
+    {
+      "name": "Visby Scholarship",
+      "detail": "Merit-based scholarship for academic excellence and leadership",
+      "place": "Sweden",
+      "year": "2016"
+    },
+    {
+      "name": "Erasmus Mundus Aurora 2",
+      "detail": "International research mobility programme",
+      "place": "European Union",
+      "year": "2015"
+    },
+    {
+      "name": "Rector's Certificate of Honour",
+      "detail": "Ten best young researchers, Kazan Federal University",
+      "place": "Russia",
+      "year": "2015"
+    },
+    {
+      "name": "RFBR research grant 14-03-31389",
+      "detail": "Two-year young-scientist grant",
+      "place": "Russia",
+      "year": "2014"
+    },
+    {
+      "name": "Best PhD student in natural sciences in Tatarstan",
+      "detail": "1st place",
+      "place": "Russia",
+      "year": "2013"
+    }
   ]
 }

@@ -1,6 +1,6 @@
 # ruzx.github.io
 
-Personal site of Ruzal Sitdikov: profile, CV, blog, plus two installable web apps. No dependencies, only Node.
+Personal site of Ruzal Sitdikov: profile, CV, blog, plus two free educational web apps. No dependencies, only Node.
 
 | URL | What | Source |
 |---|---|---|
@@ -8,7 +8,7 @@ Personal site of Ruzal Sitdikov: profile, CV, blog, plus two installable web app
 | `/cv/` | Full CV (Print / PDF button) | `content/profile.json` |
 | `/blog/` | Blog + RSS (`/feed.xml`) | `content/posts/*.md` |
 | `/chemedit/` | ChemEdit: structure editor + ELN (PWA) | built from the `chemeditnew` repo |
-| `/arcade/` | Molecule Arcade: chemistry puzzle games (PWA) | built from the `chemeditnew` repo |
+| `/chemgame/` | ChemGame: organic chemistry learning games (PWA) | built from the `chemeditnew` repo |
 
 ## How it is published
 
@@ -22,7 +22,7 @@ So after every change: **build → commit → push.**
 ```bash
 npm run build      # regenerate the pages after editing content/
 npm run dev        # build + preview at http://localhost:8080
-npm run site       # rebuild ChemEdit + Molecule Arcade from chemeditnew, copy them here, rebuild pages
+npm run site       # rebuild ChemEdit + ChemGame from chemeditnew, copy them here, rebuild pages
 ```
 
 `npm run site` finds `chemeditnew` automatically: next to this folder, in `~/projectstest/` or in `~/Documents/GitHub/`. If it's somewhere else, run `set CHEMEDIT_DIR=C:\path\to\chemeditnew` first.
@@ -44,6 +44,8 @@ npm run site       # rebuild ChemEdit + Molecule Arcade from chemeditnew, copy t
   Text in **Markdown**: headings, lists, links, images (put them in assets/), code, tables, quotes.
   ```
 - Other files in this repo (for example `app.html`, `elnviewer.html`) are left untouched and stay reachable at their URLs.
+- Moved a page? Add `"/old/url/": "/new/url/"` to `content/redirects.json` and rebuild.
+- `arcade/` is the old address of ChemGame. It now only redirects to `/chemgame/`, and you can delete it whenever you like.
 
 ## Notes
 

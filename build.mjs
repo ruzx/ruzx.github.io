@@ -77,7 +77,7 @@ function frontMatter(text) {
 }
 
 // ---------------------------------------------------------------- layout
-const NAV = [["/", "Home"], ["/cv/", "CV"], ["/blog/", "Blog"], ["/chemedit/", "ChemEdit"], ["/arcade/", "Arcade"]];
+const NAV = [["/", "Home"], ["/cv/", "CV"], ["/blog/", "Blog"], ["/chemedit/", "ChemEdit"], ["/chemgame/", "ChemGame"]];
 function page({ title, desc = P.summary, path, body, cls = "" }) {
   const full = title ? `${title} · ${P.name}` : `${P.name} — ${P.title}`;
   return `<!doctype html>
@@ -148,7 +148,7 @@ write("index.html", page({ path: "/", body: `
 <section><h2>About</h2><p class="lead">${esc(P.summary)}</p>
 <ul class="tags">${P.interests.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>
 <p><a class="btn" href="/cv/">Full CV →</a></p></section>
-<section><h2>Apps for chemists</h2><p class="muted">They run in the browser and install as offline apps on Windows, macOS, Android and iOS (use the browser's <em>Install</em> or <em>Add to Home Screen</em>).</p>
+<section><h2>Educational apps</h2><p class="muted">Free tools made mainly for teaching and learning chemistry — for students, teachers and anyone curious. They run in the browser and install as offline apps on Windows, macOS, Android and iOS (use the browser's <em>Install</em> or <em>Add to Home Screen</em>). They are not validated for regulated or GLP work.</p>
 <div class="apps">${P.apps.map(appCard).join("")}</div></section>
 <section><h2>Selected publications</h2><ol class="pubs">${P.publications.filter((p) => p.selected).map(pub).join("")}</ol>
 <p><a href="/cv/#publications">All ${P.publications.length} publications →</a></p></section>
@@ -193,8 +193,17 @@ write("feed.xml", `<?xml version="1.0" encoding="UTF-8"?>
 ${posts.map((p) => `<item><title>${esc(p.title)}</title><link>${SITE_URL}/blog/${p.slug}/</link><guid>${SITE_URL}/blog/${p.slug}/</guid><pubDate>${new Date(p.date + "T12:00:00Z").toUTCString()}</pubDate><description>${esc(p.excerpt)}</description></item>`).join("\n")}
 </channel></rss>`);
 write("sitemap.xml", `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${["/", "/cv/", "/blog/", "/chemedit/", "/arcade/", ...posts.map((p) => `/blog/${p.slug}/`)].map((u) => `<url><loc>${SITE_URL}${u}</loc></url>`).join("")}</urlset>`);
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${["/", "/cv/", "/blog/", "/chemedit/", "/chemgame/", ...posts.map((p) => `/blog/${p.slug}/`)].map((u) => `<url><loc>${SITE_URL}${u}</loc></url>`).join("")}</urlset>`);
 write("404.html", page({ title: "Not found", path: "/404.html", body: `<h1>Page not found</h1><p><a href="/">Back to the home page</a></p>` }));
+
+// redirects for moved pages: content/redirects.json  { "/old/path/": "/new/path/" }
+const redirFile = join(root, "content/redirects.json");
+const redirects = existsSync(redirFile) ? JSON.parse(readFileSync(redirFile, "utf8")) : {};
+for (const [from, to] of Object.entries(redirects)) {
+  const rel = from.replace(/^\/|\/$/g, "");
+  if (!rel || existsSync(join(OUT, rel, "index.html")) && !readFileSync(join(OUT, rel, "index.html"), "utf8").includes('http-equiv="refresh"')) continue; // never overwrite a real page
+  write(`${rel}/index.html`, `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Moved</title><meta http-equiv="refresh" content="0; url=${esc(to)}"><link rel="canonical" href="${esc(to)}"><script>location.replace(${JSON.stringify(to)})</script></head><body><p>This page has moved to <a href="${esc(to)}">${esc(to)}</a>.</p></body></html>`);
+}
 
 if (CI) {
   const site = join(root, "_site");
@@ -202,4 +211,4 @@ if (CI) {
   mkdirSync(site);
   for (const e of readdirSync(root)) if (![".git", ".github", "node_modules", "_site"].includes(e)) cpSync(join(root, e), join(site, e), { recursive: true });
 }
-console.log(`Built: index.html, cv/, blog/ (${posts.length} post${posts.length === 1 ? "" : "s"}), feed.xml, sitemap.xml · apps: ${["chemedit", "arcade"].filter((a) => existsSync(join(root, a))).join(", ") || "none"}`);
+console.log(`Built: index.html, cv/, blog/ (${posts.length} post${posts.length === 1 ? "" : "s"}), feed.xml, sitemap.xml · apps: ${["chemedit", "chemgame"].filter((a) => existsSync(join(root, a))).join(", ") || "none"}`);
