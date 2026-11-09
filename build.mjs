@@ -103,7 +103,7 @@ function page({ title, desc = P.summary, path, body, cls = "" }) {
 <main class="wrap">
 ${body}
 </main>
-<footer class="foot"><div class="wrap">© ${new Date().getFullYear()} ${esc(P.name)} · <a href="/feed.xml">RSS</a></div></footer>
+<footer class="foot"><div class="wrap">© ${new Date().getFullYear()} ${esc(P.name)} · <a href="/feed.xml">RSS</a> · <a href="/privacy/">Privacy</a></div></footer>
 </body>
 </html>`;
 }
@@ -118,7 +118,9 @@ const appCard = (a) => `<a class="app" href="${esc(a.url)}"><img src="${esc(a.ic
 
 // ---------------------------------------------------------------- build
 // only the generated folders are cleared — sources, apps and your other files stay untouched
-for (const d of ["cv", "blog", "research"]) rmSync(join(OUT, d), { recursive: true, force: true });
+const generated = new Set(["cv", "blog", "research"]);
+const pageNames = existsSync(join(root, "content/pages")) ? readdirSync(join(root, "content/pages")).filter((f) => f.endsWith(".md")).map((f) => f.replace(/\.md$/, "")) : [];
+for (const d of [...generated, ...pageNames]) if (!["chemedit", "chemgame", "arcade", "assets", "content", ".well-known"].includes(d)) rmSync(join(OUT, d), { recursive: true, force: true });
 writeFileSync(join(OUT, ".nojekyll"), ""); // no Jekyll: serve the files exactly as built
 
 // posts
@@ -213,13 +215,25 @@ for (const p of posts) {
 </article>` }));
 }
 
+// simple pages: content/pages/<slug>.md → /<slug>/
+const pageDir = join(root, "content/pages");
+const pages = (existsSync(pageDir) ? readdirSync(pageDir) : []).filter((f) => f.endsWith(".md")).map((f) => {
+  const { meta, body } = frontMatter(readFileSync(join(pageDir, f), "utf8"));
+  const slugName = meta.slug || f.replace(/\.md$/, "");
+  write(`${slugName}/index.html`, page({ title: meta.title || slugName, desc: meta.summary || meta.title || slugName, path: `/${slugName}/`, body: `
+<article class="post"><header><h1>${esc(meta.title || slugName)}</h1>${meta.updated ? `<p class="muted">Last updated ${fmtDate(meta.updated)}</p>` : ""}</header>
+${markdown(body)}</article>` }));
+  return slugName;
+});
+for (const d of pages) generated.add(d);
+
 // RSS + sitemap + 404
 write("feed.xml", `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0"><channel><title>${esc(P.name)} — blog</title><link>${SITE_URL}/blog/</link><description>${esc(P.title)}</description>
 ${posts.map((p) => `<item><title>${esc(p.title)}</title><link>${SITE_URL}/blog/${p.slug}/</link><guid>${SITE_URL}/blog/${p.slug}/</guid><pubDate>${new Date(p.date + "T12:00:00Z").toUTCString()}</pubDate><description>${esc(p.excerpt)}</description></item>`).join("\n")}
 </channel></rss>`);
 write("sitemap.xml", `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${["/", "/research/", "/cv/", "/blog/", "/chemedit/", "/chemgame/", ...posts.map((p) => `/blog/${p.slug}/`)].map((u) => `<url><loc>${SITE_URL}${u}</loc></url>`).join("")}</urlset>`);
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${["/", "/research/", "/cv/", "/blog/", "/chemedit/", "/chemgame/", ...pages.map((p) => `/${p}/`), ...posts.map((p) => `/blog/${p.slug}/`)].map((u) => `<url><loc>${SITE_URL}${u}</loc></url>`).join("")}</urlset>`);
 write("404.html", page({ title: "Not found", path: "/404.html", body: `<h1>Page not found</h1><p><a href="/">Back to the home page</a></p>` }));
 
 // redirects for moved pages: content/redirects.json  { "/old/path/": "/new/path/" }

@@ -1,24 +1,124 @@
 {
   "name": "ChemGame — organic chemistry learning games",
   "short_name": "ChemGame",
-  "description": "Four free, offline learning games for organic chemistry, made for students and teachers.",
+  "description": "Four free, offline learning games for organic chemistry — link transformations, put synthetic routes in order, draw mystery molecules from clues and play functional-group bingo. Made for students and teachers.",
   "id": "./",
   "start_url": "./#/",
   "scope": "./",
   "display": "standalone",
   "background_color": "#f6f7f9",
   "theme_color": "#5b3fd0",
-  "categories": ["education", "games"],
+  "categories": [
+    "education",
+    "games"
+  ],
   "icons": [
-    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
-    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
-    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml" }
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
   ],
   "shortcuts": [
-    { "name": "Transform Link", "url": "./#/link" },
-    { "name": "Route Forge", "url": "./#/forge" },
-    { "name": "Mystery Molecule", "url": "./#/mystery" },
-    { "name": "Group Bingo", "url": "./#/bingo" }
-  ]
+    {
+      "name": "Transform Link",
+      "url": "./#/link"
+    },
+    {
+      "name": "Route Forge",
+      "url": "./#/forge"
+    },
+    {
+      "name": "Mystery Molecule",
+      "url": "./#/mystery"
+    },
+    {
+      "name": "Group Bingo",
+      "url": "./#/bingo"
+    }
+  ],
+  "lang": "en",
+  "dir": "ltr",
+  "screenshots": [
+    {
+      "src": "screenshots/1-hub-wide.jpg",
+      "sizes": "1920x1080",
+      "type": "image/jpeg",
+      "form_factor": "wide",
+      "label": "Four organic chemistry learning games"
+    },
+    {
+      "src": "screenshots/1-hub-narrow.jpg",
+      "sizes": "1080x1920",
+      "type": "image/jpeg",
+      "form_factor": "narrow",
+      "label": "Four organic chemistry learning games"
+    },
+    {
+      "src": "screenshots/2-link-wide.jpg",
+      "sizes": "1920x1080",
+      "type": "image/jpeg",
+      "form_factor": "wide",
+      "label": "Transform Link: match starting material, conditions and product"
+    },
+    {
+      "src": "screenshots/2-link-narrow.jpg",
+      "sizes": "1080x1920",
+      "type": "image/jpeg",
+      "form_factor": "narrow",
+      "label": "Transform Link: match starting material, conditions and product"
+    },
+    {
+      "src": "screenshots/3-forge-wide.jpg",
+      "sizes": "1920x1080",
+      "type": "image/jpeg",
+      "form_factor": "wide",
+      "label": "Route Forge: put reagent cards in the right order"
+    },
+    {
+      "src": "screenshots/3-forge-narrow.jpg",
+      "sizes": "1080x1920",
+      "type": "image/jpeg",
+      "form_factor": "narrow",
+      "label": "Route Forge: put reagent cards in the right order"
+    },
+    {
+      "src": "screenshots/4-bingo-wide.jpg",
+      "sizes": "1920x1080",
+      "type": "image/jpeg",
+      "form_factor": "wide",
+      "label": "Group Bingo: spot the functional groups"
+    },
+    {
+      "src": "screenshots/4-bingo-narrow.jpg",
+      "sizes": "1080x1920",
+      "type": "image/jpeg",
+      "form_factor": "narrow",
+      "label": "Group Bingo: spot the functional groups"
+    }
+  ],
+  "prefer_related_applications": false,
+  "handle_links": "preferred",
+  "launch_handler": {
+    "client_mode": [
+      "focus-existing",
+      "auto"
+    ]
+  }
 }

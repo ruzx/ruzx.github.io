@@ -1,37 +1,155 @@
 {
   "name": "ChemEdit — structures & lab notebook",
   "short_name": "ChemEdit",
-  "description": "A free educational tool: draw chemical structures, practise keeping a lab notebook. Works offline; files stay on your device.",
+  "description": "A free educational tool for chemistry: draw structures and double-click to edit them again, save them as ordinary files (SVG, Molfile, SDF, CDXML, RXN, KET, SMILES), and practise keeping a lab notebook. Works offline; files stay on your device.",
   "id": "./",
   "start_url": "./#/library",
   "scope": "./",
   "display": "standalone",
-  "display_override": ["window-controls-overlay", "standalone"],
+  "display_override": [
+    "window-controls-overlay",
+    "standalone"
+  ],
   "background_color": "#f6f7f9",
   "theme_color": "#2f64d8",
-  "categories": ["education", "productivity", "utilities"],
+  "categories": [
+    "education",
+    "productivity",
+    "utilities"
+  ],
   "icons": [
-    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
-    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
-    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml" }
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
   ],
   "shortcuts": [
-    { "name": "Structures", "url": "./#/library", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
-    { "name": "Lab notebook", "url": "./#/eln", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] }
+    {
+      "name": "Structures",
+      "url": "./#/library",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Lab notebook",
+      "url": "./#/eln",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
   ],
   "file_handlers": [
     {
-      "action": "./#/library",
+      "action": "./",
       "accept": {
-        "chemical/x-mdl-molfile": [".mol", ".mdl"],
-        "chemical/x-mdl-sdfile": [".sdf", ".sd"],
-        "chemical/x-mdl-rxnfile": [".rxn"],
-        "chemical/x-cdxml": [".cdxml"],
-        "application/x-chemedit": [".chemedit", ".ket"],
-        "chemical/x-daylight-smiles": [".smi", ".smiles"]
-      }
+        "application/x-mdl-molfile": [
+          ".mol",
+          ".mdl"
+        ],
+        "application/x-mdl-sdfile": [
+          ".sdf",
+          ".sd"
+        ],
+        "application/x-mdl-rxnfile": [
+          ".rxn"
+        ],
+        "application/x-cdxml": [
+          ".cdxml"
+        ],
+        "application/x-chemedit": [
+          ".chemedit",
+          ".ket"
+        ],
+        "application/x-daylight-smiles": [
+          ".smi",
+          ".smiles"
+        ]
+      },
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
     }
   ],
-  "launch_handler": { "client_mode": "focus-existing" }
+  "launch_handler": {
+    "client_mode": [
+      "focus-existing",
+      "auto"
+    ]
+  },
+  "lang": "en",
+  "dir": "ltr",
+  "screenshots": [
+    {
+      "src": "screenshots/1-library-wide.jpg",
+      "sizes": "1920x1080",
+      "type": "image/jpeg",
+      "form_factor": "wide",
+      "label": "Structure library with thumbnails — double-click to edit"
+    },
+    {
+      "src": "screenshots/1-library-narrow.jpg",
+      "sizes": "1080x1920",
+      "type": "image/jpeg",
+      "form_factor": "narrow",
+      "label": "Structure library with thumbnails — double-click to edit"
+    },
+    {
+      "src": "screenshots/2-editor-wide.jpg",
+      "sizes": "1920x1080",
+      "type": "image/jpeg",
+      "form_factor": "wide",
+      "label": "ChemDraw-style structure editor"
+    },
+    {
+      "src": "screenshots/2-editor-narrow.jpg",
+      "sizes": "1080x1920",
+      "type": "image/jpeg",
+      "form_factor": "narrow",
+      "label": "ChemDraw-style structure editor"
+    },
+    {
+      "src": "screenshots/3-notebook-wide.jpg",
+      "sizes": "1920x1080",
+      "type": "image/jpeg",
+      "form_factor": "wide",
+      "label": "Lab notebook: scheme, stoichiometry and lab book"
+    },
+    {
+      "src": "screenshots/3-notebook-narrow.jpg",
+      "sizes": "1080x1920",
+      "type": "image/jpeg",
+      "form_factor": "narrow",
+      "label": "Lab notebook: scheme, stoichiometry and lab book"
+    }
+  ],
+  "prefer_related_applications": false,
+  "handle_links": "preferred"
 }
