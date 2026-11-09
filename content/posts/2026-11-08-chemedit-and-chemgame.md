@@ -26,6 +26,6 @@ ChemEdit started as a plugin for Obsidian. Its drawing engine is now also availa
 
 ## Install them
 
-Both are *progressive web apps*: open them in Chrome, Edge or Safari and choose **Install** (or **Add to Home Screen** on a phone). After that they start from your app list and work without an internet connection. There is no account and nothing is uploaded. They are teaching tools, not validated software for regulated lab work.
+Both are *progressive web apps*: open them in Chrome, Edge or Safari and choose **Install** (or **Add to Home Screen** on a phone). After that they start from your app list and work without an internet connection. There is no account and nothing is uploaded.
 
 Feedback and ideas are very welcome — get in touch via the links on the [home page](/).

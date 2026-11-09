@@ -2,13 +2,13 @@
   "name": "Ruzal Sitdikov",
   "title": "Synthetic chemist — electrocatalysis, sustainable catalysis & scale-up",
   "location": "Stockholm, Sweden",
-  "photo": "",
+  "photo": "/assets/profile.jpg",
   "summary": "Ph.D. chemist with more than ten years of research in sustainable catalysis, electro-organic synthesis and reaction optimisation. I develop C–H functionalisation and late-stage functionalisation methods for complex molecules, map catalytic cycles to make reactions robust, and take lab-scale cascades towards scalable, greener processes. I also build small free software tools for teaching and learning chemistry.",
   "links": [
     {
       "label": "Email",
-      "url": "mailto:ruzal.sitdikov@ilk.uu.se",
-      "text": "ruzal.sitdikov@ilk.uu.se"
+      "url": "mailto:ruzal@kth.se",
+      "text": "ruzal@kth.se"
     },
     {
       "label": "LinkedIn",
@@ -24,6 +24,11 @@
       "label": "GitHub",
       "url": "https://github.com/ruzx",
       "text": "github.com/ruzx"
+    },
+    {
+      "label": "ORCID",
+      "url": "",
+      "text": ""
     }
   ],
   "interests": [
@@ -78,15 +83,15 @@
   ],
   "experience": [
     {
-      "role": "Postdoctoral Researcher",
-      "org": "KTH Royal Institute of Technology",
+      "role": "Postdoctoral Researcher (H. Lundberg group)",
+      "org": "KTH Royal Institute of Technology, Department of Chemistry",
       "place": "Stockholm, Sweden",
       "dates": "Jan 2026 – present",
       "points": [
-        "Developing sustainable, atom-efficient catalytic cascades for complex small molecules.",
-        "Mapping catalytic cycles to make reactions more robust and predictable.",
-        "Synchrotron X-ray characterisation for structural and mechanistic insight.",
-        "Optimising reaction conditions for scale-up with integrated data-driven workflows."
+        "Method development in organic electrosynthesis, combining homogeneous catalysis with electrochemistry in projects of both fundamental and applied character.",
+        "Electroanalytical evaluation of new reactions (cyclic voltammetry, controlled-potential and constant-current electrolysis) to understand mechanisms and guide catalyst and condition design.",
+        "Reaction optimisation with high-throughput screening and data-driven experimental design.",
+        "Supervision of Bachelor's and Master's students in research projects; contribution to group administration."
       ]
     },
     {
@@ -376,5 +381,123 @@
       "place": "Russia",
       "year": "2013"
     }
-  ]
+  ],
+  "research": {
+    "vision": "I develop redox methods that make synthesis cleaner and more selective. By combining catalysis, electrochemistry and electroanalysis, I aim for reactions that functionalise C–H bonds, modify drug-like molecules at a late stage and install isotope labels — and that are understood well enough mechanistically to be scaled and used by others.",
+    "themes": [
+      {
+        "title": "Electrosynthesis with catalysis",
+        "period": "current · KTH",
+        "text": "Method development that pairs molecular catalysts with electrodes, using electroanalysis (CV, controlled-potential and constant-current electrolysis) to understand mechanisms and design better catalysts and conditions.",
+        "methods": [
+          "Molecular electrocatalysis",
+          "Cyclic voltammetry",
+          "Constant-current / potential electrolysis",
+          "HTE & data-driven optimisation"
+        ],
+        "dois": []
+      },
+      {
+        "title": "Metalla-electrocatalytic C–H functionalisation",
+        "period": "2023–2025 · Uppsala",
+        "text": "Earth-abundant metal catalysts (e.g. cobalt) driven by electricity instead of chemical oxidants, for C–H functionalisation and late-stage modification of bioactive molecules at room temperature.",
+        "methods": [
+          "Co/Ni electrocatalysis",
+          "Late-stage functionalisation",
+          "Scale-up"
+        ],
+        "dois": [
+          "10.1039/D5CC04394H",
+          "10.3762/bjoc.20.214"
+        ]
+      },
+      {
+        "title": "Electrochemical isotope labelling",
+        "period": "2018–2021 · KAUST",
+        "text": "Nickel-catalysed electrochemical cross-electrophile coupling to install CD₃ and ¹³CD₃ groups into drug-like molecules — simple, inexpensive routes to labelled compounds for DMPK studies.",
+        "methods": [
+          "Ni-catalysed XEC",
+          "Deuteration",
+          "¹³C/D labelling"
+        ],
+        "dois": [
+          "10.1055/s-0042-1751558",
+          "10.1002/chem.202101179"
+        ]
+      },
+      {
+        "title": "Electroanalysis, redox mediators and sensors",
+        "period": "2011–2023 · KTH, Kazan",
+        "text": "Redox-active probes and mediators (ferrocene, Ru/Os complexes, phenazine and Neutral Red macrocycles) for ion-to-electron transduction, voltammetric sensing and aptasensors.",
+        "methods": [
+          "Voltammetry",
+          "Redox mediators",
+          "Modified electrodes"
+        ],
+        "dois": [
+          "10.1016/j.snb.2025.138359",
+          "10.1002/elan.201400328"
+        ]
+      },
+      {
+        "title": "Supramolecular and carbohydrate chemistry",
+        "period": "2009–2018 · Kazan, Leuven, KTH, Åbo",
+        "text": "(Thia)calixarene and pillararene receptors, glycodendrimers against multiresistant bacteria, and mannose-derived organogelators — the foundation in synthesis, recognition and materials that I build on.",
+        "methods": [
+          "Macrocycles",
+          "Click chemistry",
+          "Glycochemistry",
+          "Gels & rheology"
+        ],
+        "dois": [
+          "10.1016/j.carres.2022.108596",
+          "10.1016/j.tet.2009.10.075"
+        ]
+      }
+    ],
+    "teaching": [
+      "Supervision of Bachelor's and Master's students in research projects at KTH, Uppsala University, KU Leuven and Kazan Federal University.",
+      "Designed and led a GC-MS analytical chromatography training course at KTH for more than 50 students.",
+      "Mentoring of junior researchers and interns at Uppsala University and KAUST; laboratory safety training at Kazan Federal University.",
+      "Free educational software for organic chemistry teaching: ChemEdit (structures and lab notebook) and ChemGame (learning games)."
+    ],
+    "environments": [
+      {
+        "group": "H. Lundberg",
+        "place": "KTH Royal Institute of Technology, Sweden"
+      },
+      {
+        "group": "O. Verho & A. Karlén",
+        "place": "Uppsala University, Sweden"
+      },
+      {
+        "group": "M. Cuartero & G. Crespo",
+        "place": "KTH Royal Institute of Technology, Sweden"
+      },
+      {
+        "group": "M. Rueping",
+        "place": "KAUST Catalysis Center, Saudi Arabia"
+      },
+      {
+        "group": "R. Leino",
+        "place": "Åbo Akademi University, Finland"
+      },
+      {
+        "group": "O. Ramström",
+        "place": "KTH Royal Institute of Technology, Sweden"
+      },
+      {
+        "group": "W. Dehaen",
+        "place": "KU Leuven, Belgium"
+      },
+      {
+        "group": "I. S. Antipin & I. I. Stoikov",
+        "place": "Kazan Federal University, Russia"
+      },
+      {
+        "group": "A. Casnati",
+        "place": "University of Parma, Italy"
+      }
+    ]
+  }
 }

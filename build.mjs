@@ -77,7 +77,7 @@ function frontMatter(text) {
 }
 
 // ---------------------------------------------------------------- layout
-const NAV = [["/", "Home"], ["/cv/", "CV"], ["/blog/", "Blog"], ["/chemedit/", "ChemEdit"], ["/chemgame/", "ChemGame"]];
+const NAV = [["/", "Home"], ["/research/", "Research"], ["/cv/", "CV"], ["/blog/", "Blog"], ["/chemedit/", "ChemEdit"], ["/chemgame/", "ChemGame"]];
 function page({ title, desc = P.summary, path, body, cls = "" }) {
   const full = title ? `${title} · ${P.name}` : `${P.name} — ${P.title}`;
   return `<!doctype html>
@@ -103,14 +103,14 @@ function page({ title, desc = P.summary, path, body, cls = "" }) {
 <main class="wrap">
 ${body}
 </main>
-<footer class="foot"><div class="wrap">© ${new Date().getFullYear()} ${esc(P.name)} · <a href="/feed.xml">RSS</a> · Built with a tiny static generator, hosted on GitHub Pages</div></footer>
+<footer class="foot"><div class="wrap">© ${new Date().getFullYear()} ${esc(P.name)} · <a href="/feed.xml">RSS</a></div></footer>
 </body>
 </html>`;
 }
 
 const initials = P.name.split(/\s+/).map((w) => w[0]).join("").slice(0, 2);
 const avatar = P.photo ? `<img class="avatar" src="${esc(P.photo)}" alt="${esc(P.name)}">` : `<div class="avatar initials" aria-hidden="true">${esc(initials)}</div>`;
-const linkList = (cls = "links") => `<ul class="${cls}">${P.links.map((l) => `<li><a href="${esc(l.url)}"${/^https?:/.test(l.url) ? ' rel="me noopener"' : ""}><span class="lk-l">${esc(l.label)}</span> ${esc(l.text)}</a></li>`).join("")}</ul>`;
+const linkList = (cls = "links") => `<ul class="${cls}">${P.links.filter((l) => l.url && l.text).map((l) => `<li><a href="${esc(l.url)}"${/^https?:/.test(l.url) ? ' rel="me noopener"' : ""}><span class="lk-l">${esc(l.label)}</span> ${esc(l.text)}</a></li>`).join("")}</ul>`;
 const doiLink = (d) => d ? ` <a class="doi" href="https://doi.org/${esc(d)}">doi:${esc(d)}</a>` : "";
 const authors = (a) => esc(a).replace(/Sitdikov R\.(?: ?R\.)?/g, (m) => `<strong>${m}</strong>`);
 const pub = (p) => `<li>${authors(p.authors)} “${esc(p.title)}”. <em>${esc(p.venue)}</em>, ${p.year}.${doiLink(p.doi)}</li>`;
@@ -118,7 +118,7 @@ const appCard = (a) => `<a class="app" href="${esc(a.url)}"><img src="${esc(a.ic
 
 // ---------------------------------------------------------------- build
 // only the generated folders are cleared — sources, apps and your other files stay untouched
-for (const d of ["cv", "blog"]) rmSync(join(OUT, d), { recursive: true, force: true });
+for (const d of ["cv", "blog", "research"]) rmSync(join(OUT, d), { recursive: true, force: true });
 writeFileSync(join(OUT, ".nojekyll"), ""); // no Jekyll: serve the files exactly as built
 
 // posts
@@ -134,6 +134,10 @@ const posts = (existsSync(postDir) ? readdirSync(postDir) : []).filter((f) => f.
 
 const postItem = (p) => `<li class="post-item"><time datetime="${p.date}">${fmtDate(p.date)}</time><a href="/blog/${p.slug}/">${esc(p.title)}</a><p>${esc(p.excerpt)}</p></li>`;
 
+const R = P.research;
+const slug = (s) => String(s).toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+const pubByDoi = new Map(P.publications.map((p) => [p.doi, p]));
+
 // home
 write("index.html", page({ path: "/", body: `
 <section class="hero">
@@ -148,12 +152,34 @@ write("index.html", page({ path: "/", body: `
 <section><h2>About</h2><p class="lead">${esc(P.summary)}</p>
 <ul class="tags">${P.interests.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>
 <p><a class="btn" href="/cv/">Full CV →</a></p></section>
-<section><h2>Educational apps</h2><p class="muted">Free tools made mainly for teaching and learning chemistry — for students, teachers and anyone curious. They run in the browser and install as offline apps on Windows, macOS, Android and iOS (use the browser's <em>Install</em> or <em>Add to Home Screen</em>). They are not validated for regulated or GLP work.</p>
+${R ? `<section><h2>Research</h2><p>${esc(R.vision)}</p>
+<div class="themes mini">${R.themes.map((t) => `<a class="theme" href="/research/#${slug(t.title)}"><span class="theme-t">${esc(t.title)}</span><span class="theme-p">${esc(t.period)}</span></a>`).join("")}</div>
+<p><a class="btn" href="/research/">Research overview →</a></p></section>` : ""}
+<section><h2>Educational apps</h2><p class="muted">Free tools made mainly for teaching and learning chemistry — for students, teachers and anyone curious. They run in the browser and install as offline apps on Windows, macOS, Android and iOS (use the browser's <em>Install</em> or <em>Add to Home Screen</em>).</p>
 <div class="apps">${P.apps.map(appCard).join("")}</div></section>
 <section><h2>Selected publications</h2><ol class="pubs">${P.publications.filter((p) => p.selected).map(pub).join("")}</ol>
 <p><a href="/cv/#publications">All ${P.publications.length} publications →</a></p></section>
 ${posts.length ? `<section><h2>Latest from the blog</h2><ul class="posts">${posts.slice(0, 3).map(postItem).join("")}</ul><p><a href="/blog/">All posts →</a></p></section>` : ""}
 ` }));
+
+// research
+if (R) write("research/index.html", page({ title: "Research", desc: R.vision, path: "/research/", body: `
+<h1>Research</h1>
+<p class="lead">${esc(R.vision)}</p>
+<section><h2>Research themes</h2>
+${R.themes.map((t) => `<article class="theme-full" id="${slug(t.title)}">
+  <div class="theme-head"><h3>${esc(t.title)}</h3><span class="theme-p">${esc(t.period)}</span></div>
+  ${t.image ? `<img class="theme-img" src="${esc(t.image)}" alt="" loading="lazy">` : ""}
+  <p>${esc(t.text)}</p>
+  ${t.methods?.length ? `<ul class="tags">${t.methods.map((m) => `<li>${esc(m)}</li>`).join("")}</ul>` : ""}
+  ${t.dois?.length ? `<ol class="pubs small">${t.dois.map((d) => pubByDoi.get(d)).filter(Boolean).map(pub).join("")}</ol>` : ""}
+</article>`).join("")}
+</section>
+${R.teaching?.length ? `<section><h2>Teaching &amp; supervision</h2><ul class="plain">${R.teaching.map((x) => `<li>${esc(x)}</li>`).join("")}</ul></section>` : ""}
+<section><h2>Fellowships &amp; grants</h2><ul class="awards">${P.awards.map((a) => `<li><span class="aw-y">${esc(a.year)}</span><span><strong>${esc(a.name)}</strong> — ${esc(a.detail)}</span></li>`).join("")}</ul></section>
+${R.environments?.length ? `<section><h2>Research environments</h2><p class="muted">Groups I have worked in.</p><ul class="envs">${R.environments.map((e) => `<li><strong>${esc(e.group)}</strong><span>${esc(e.place)}</span></li>`).join("")}</ul></section>` : ""}
+<section><h2>Educational software</h2><div class="apps">${P.apps.map(appCard).join("")}</div></section>
+<p><a href="/cv/#publications">All publications →</a></p>` }));
 
 // CV
 const entry = (e, title, sub) => `<article class="entry"><div class="entry-head"><div><h3>${esc(title)}</h3><div class="entry-org">${esc(sub)}</div></div><div class="entry-meta">${esc(e.dates)}<br>${esc(e.place)}</div></div>${e.points?.length ? `<ul>${e.points.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}</article>`;
@@ -193,7 +219,7 @@ write("feed.xml", `<?xml version="1.0" encoding="UTF-8"?>
 ${posts.map((p) => `<item><title>${esc(p.title)}</title><link>${SITE_URL}/blog/${p.slug}/</link><guid>${SITE_URL}/blog/${p.slug}/</guid><pubDate>${new Date(p.date + "T12:00:00Z").toUTCString()}</pubDate><description>${esc(p.excerpt)}</description></item>`).join("\n")}
 </channel></rss>`);
 write("sitemap.xml", `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${["/", "/cv/", "/blog/", "/chemedit/", "/chemgame/", ...posts.map((p) => `/blog/${p.slug}/`)].map((u) => `<url><loc>${SITE_URL}${u}</loc></url>`).join("")}</urlset>`);
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${["/", "/research/", "/cv/", "/blog/", "/chemedit/", "/chemgame/", ...posts.map((p) => `/blog/${p.slug}/`)].map((u) => `<url><loc>${SITE_URL}${u}</loc></url>`).join("")}</urlset>`);
 write("404.html", page({ title: "Not found", path: "/404.html", body: `<h1>Page not found</h1><p><a href="/">Back to the home page</a></p>` }));
 
 // redirects for moved pages: content/redirects.json  { "/old/path/": "/new/path/" }

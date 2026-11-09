@@ -31,7 +31,7 @@ h3{margin:18px 0 8px;font-size:15px}
 .nav-link{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:var(--ink);font-weight:500}
 .nav-link:hover{background:var(--surface-2)}
 .nav-link.on{background:color-mix(in srgb,var(--accent) 13%,transparent);color:var(--accent)}
-.nav-icon{width:22px;text-align:center;font-size:17px}
+.nav-icon{width:22px;height:22px;display:flex;align-items:center;justify-content:center}
 .store-badge{border:1px solid var(--line);background:var(--surface-2);color:var(--muted);border-radius:8px;padding:7px 9px;font:12px var(--font);text-align:left;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .store-badge span{color:var(--ink);font-weight:600}
 .app-main{flex:1;min-width:0;overflow:auto;height:100%}
@@ -41,7 +41,6 @@ h3{margin:18px 0 8px;font-size:15px}
   .app-nav{width:auto;flex-direction:row;padding:4px 6px calc(4px + env(safe-area-inset-bottom));border-right:0;border-top:1px solid var(--line);justify-content:space-around}
   .brand,.store-badge,.app-nav .spacer{display:none}
   .nav-link{flex-direction:column;gap:1px;padding:5px 8px;font-size:11px;flex:1;text-align:center}
-  .nav-icon{font-size:19px}
   .view{padding:12px 12px 40px}
 }
 
@@ -333,7 +332,10 @@ body{flex-direction:column}
 .bg-cell.miss{border-color:#e0a800;border-style:dashed}
 .bg-cell.line{background:var(--good);border-color:var(--good);color:#fff}
 .bg-fb{margin-top:10px;font-size:13.5px}
-@media (max-width:720px){.bg-layout{grid-template-columns:1fr}.bg-cell{font-size:11px}}
+.bg-cell{min-width:0;overflow-wrap:anywhere;hyphens:auto}
+.bg-mol svg,.lk-item svg,.quiz-mol svg{max-width:100%;height:auto}
+.view{overflow-x:hidden}
+@media (max-width:720px){.bg-layout{grid-template-columns:minmax(0,1fr)}.bg-card{max-width:none;gap:5px;padding:6px}.bg-cell{aspect-ratio:auto;min-height:64px;font-size:11.5px;padding:3px;border-radius:8px}.bg-mol{min-height:180px}}
 
 /* difficulty switch, status line, help */
 .g-head h2{font-size:21px}
