@@ -1,9 +1,9 @@
 // ChemEdit offline service worker: the app shell is cached, so the app starts without a network.
 // Bump VERSION on every release (build.mjs does this automatically).
-const VERSION = "202611090042";
+const VERSION = "202611101129";
 const PREFIX = "chemedit-app-";
 const CACHE = PREFIX + VERSION;
-const SHELL = ["./", "index.html", "app.js", "manifest.webmanifest", "icons/icon.svg", "icons/icon-192.png", "icons/icon-512.png", "icons/maskable-512.png", "icons/apple-touch-icon.png"];
+const SHELL = ["./", "index.html", "app.js", "spectra.js", "manifest.webmanifest", "icons/icon.svg", "icons/icon-192.png", "icons/icon-512.png", "icons/maskable-512.png", "icons/apple-touch-icon.png"];
 
 self.addEventListener("install", (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting()));
